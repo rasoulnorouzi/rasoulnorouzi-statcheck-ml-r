@@ -1,21 +1,28 @@
 Package: statcheckml
-Title: R Port of statcheck-ml
+Title: R Port of 'statcheck-ml'
 Version: 0.1.0
 Authors@R:
     person("Rasoul", "Norouzi", role = c("aut", "cre"), email = "rslnorouzi@gmail.com")
-Description: A port of statcheck-ml, a machine-learned replacement for the
-    extraction step of the R package statcheck. The package reads a shared
-    kit of rules and a trained model exported by the mother project, and
-    runs the normalisation and extraction stages that turn text read from a
-    PDF into reported statistical test results.
+Description: A port of 'statcheck-ml', a machine-learned replacement for the
+    extraction step of the R package 'statcheck'. The package reads a PDF or
+    plain text, finds every reported statistical test result with a
+    character-level model shipped in a verified kit, recomputes each
+    result's p-value with closed-form arithmetic, and reports whether the
+    reported and the recomputed p-values agree. The model only finds
+    results; it never judges them. The kit of rules, the character
+    vocabulary, and the p-value constants are exported by the mother
+    project and read here, not restated.
 License: GPL-3
+URL: https://github.com/rasoulnorouzi/statcheck-ml-r
+BugReports: https://github.com/rasoulnorouzi/statcheck-ml-r/issues
 Encoding: UTF-8
+SystemRequirements: poppler-cpp (deb: libpoppler-cpp-dev)
 Imports:
     jsonlite,
     digest,
-    stats
+    stats,
+    pdftools
 Suggests:
-    pdftools,
     R.utils,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

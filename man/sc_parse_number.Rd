@@ -7,7 +7,8 @@
 sc_parse_number(text)
 }
 \arguments{
-\item{text}{The text to parse, such as \code{"<.001"} or \code{"−2.87"}.}
+\item{text}{The text to parse, such as \code{"<.001"} or a Unicode minus sign
+in place of a hyphen, \code{"-2.87"}.}
 }
 \value{
 A number, or \code{NA_real_} when \code{text} is empty or is not a number.

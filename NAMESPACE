@@ -2,6 +2,7 @@
 
 S3method(print,sc_kit)
 S3method(print,sc_model)
+export(sc_check)
 export(sc_check_text)
 export(sc_compute_p)
 export(sc_extract)

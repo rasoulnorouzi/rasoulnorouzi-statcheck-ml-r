@@ -140,3 +140,39 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
   )
   out
 }
+
+#' Read a PDF and check every statistical result in it
+#'
+#' Runs [sc_read_pdf()] then [sc_check_text()]: the whole pipeline from a
+#' PDF file on disk to a table of checked results. Every result carries the
+#' file it came from in `source_file`, so results from several documents can
+#' be row-bound into one table without losing where each came from.
+#'
+#' @param path A PDF file.
+#' @param kit A loaded [sc_kit()].
+#' @param model A model from [sc_load_model()]. Loading it costs about a
+#'   second, so a caller checking many documents should load it once and
+#'   pass it to every call.
+#' @param timeout Seconds to allow reading the PDF. Passed to
+#'   [sc_read_pdf()]; ignored when R.utils is not installed.
+#' @return The [sc_check_text()] result for the document's text, with
+#'   `source_file` added as the first column, holding `path` in every row.
+#'   Zero rows when the document holds nothing checkable or could not be
+#'   read. The `"stages"` attribute is kept.
+#' @examples
+#' \dontrun{
+#' kit <- sc_kit()
+#' sc_check("article.pdf", kit)
+#' }
+#' @export
+sc_check <- function(path, kit = sc_kit(), model = sc_load_model(kit), timeout = 60) {
+  text <- sc_read_pdf(path, kit, timeout = timeout)
+  out <- sc_check_text(text, kit, model)
+  stages <- attr(out, "stages")
+
+  source_file <- if (nrow(out) == 0) character(0) else rep(path, nrow(out))
+  out <- cbind(data.frame(source_file = source_file, stringsAsFactors = FALSE), out)
+
+  attr(out, "stages") <- stages
+  out
+}
