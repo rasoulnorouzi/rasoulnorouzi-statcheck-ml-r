@@ -1,9 +1,9 @@
 {
  "kit_version": "2.0.0",
  "mother_repository": "https://github.com/rasoulnorouzi/ml-statcheck",
- "mother_commit": "b71a9f92304cb99144279a852b7c815471be0168",
+ "mother_commit": "49f64536fb66a5952e59be2cefa35a2788f298f0",
  "mother_dirty": false,
- "generated_at": "2026-09-20T11:48:00.378780+00:00",
+ "generated_at": "2026-09-20T14:37:06.807217+00:00",
  "port_name": "statcheck-ml-r",
  "model_default": "gru-crf",
  "models": [
@@ -14,8 +14,8 @@
   "model/gru-crf/decoder.json": "063e08078f37550bd67a04d65c00d28a0a33189f2a4421d5a577a5d7136891de",
   "model/gru-crf/tagger.onnx": "a40aa114b41dc779a861bc243a8b250fd31f6dad6820e7c073e2371ec377951a",
   "model/gru-crf/weights.json": "7f733679470fb14e85d5a17054184ce00a220137431a0b355a48c1561aedc06a",
-  "parity/cases.json": "1a902901703954a92175ac1c1e64ff018d65380975aca7e412296b723d87a505",
-  "README.md": "078d3b58892283f2bdeb0fa2d9ba97c01278b11069af445fa9868c27a3d2dd93",
+  "parity/cases.json": "e1cd20882901c710b84b2cf8d4d98284314118a5a92740bfb9b8a3bd34ee3857",
+  "README.md": "5cb2502f8c4bce2480f10ebd4b06eb1ddf9341f3483bfeb7db49c0cce549d2a0",
   "spec/charmap.json": "6685fb09f642173eeba89db521a148a6b14d0feed93943f1a2ab469bf3c1dc98",
   "spec/font_table.json": "5b1c8dc9ad790941bb899106ecb524a906f177592ee9efd9673c796ca5d714d3",
   "spec/normalize.json": "7a113d567ac16f7e64ac60df3bd63c9cedff269fa30746b923b17d9335f65823",

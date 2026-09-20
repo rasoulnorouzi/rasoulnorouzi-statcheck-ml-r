@@ -29,13 +29,23 @@ sc_model_normalise <- function(text) {
 # `sc_as_number`, because that is what the mother repository's pipeline
 # calls at this stage. Returns a list of result lists, `df1`/`df2`/`p_value`
 # included even when `NA`.
+#
+# `g$parts` still holds each entity's raw captured text at this point, so
+# `statistic_text` and `p_value_text` are carried alongside the parsed
+# numbers: the p-value check ([sc_verdict()]) needs the text as printed, not
+# the number `sc_parse_number()` made of it, to know how many decimals the
+# paper rounded to.
 pipeline_group_model <- function(text, tags) {
   spans <- sc_tags_to_spans(tags)
   groups <- sc_group_spans(text, spans)
   rows <- list()
   for (g in groups) {
     res <- group_result_from_parts(g$parts, sc_parse_number)
-    if (!is.null(res)) rows[[length(rows) + 1L]] <- res
+    if (!is.null(res)) {
+      res$statistic_text <- g$parts[["STAT"]]
+      res$p_value_text <- g$parts[["PVAL"]]
+      rows[[length(rows) + 1L]] <- res
+    }
   }
   rows
 }
@@ -100,10 +110,15 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
       key <- if (is.na(stat)) NA_real_ else round(stat, 3)
       if (key %in% seen) next
       seen <- c(seen, key)
+      # `sc_extract()` returns the raw captured text (character columns), so
+      # the statistic and the p-value as they were printed are free to carry
+      # alongside the parsed numbers, for the rounding rule in `sc_verdict()`.
       found[[length(found) + 1L]] <- list(
         source = "pattern", test_type = pattern_hits$test_type[r], statistic = stat,
+        statistic_text = pattern_hits$statistic[r],
         df1 = sc_parse_number(pattern_hits$df1[r]), df2 = sc_parse_number(pattern_hits$df2[r]),
         p_operator = pattern_hits$p_operator[r], p_value = sc_parse_number(pattern_hits$p_value[r]),
+        p_value_text = pattern_hits$p_value[r],
         line = line_no)
       n_pattern <- n_pattern + 1L
     }
@@ -121,8 +136,13 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
     out <- empty_check_result()
   } else {
     rows <- lapply(found, function(f) {
-      p_text <- if (is.na(f$p_value)) NULL else as.character(f$p_value)
-      v <- sc_verdict(f, reported_p_text = p_text)
+      # Prefer the text as printed (carried on `f` from the pattern's raw
+      # captures or the model's raw span text); fall back to the parsed
+      # value's own text only when no printed text survived, matching
+      # `sc_verdict()`'s own fallback for a caller with no text at all.
+      p_text <- if (!is.null(f$p_value_text)) f$p_value_text else
+        (if (is.na(f$p_value)) NULL else as.character(f$p_value))
+      v <- sc_verdict(f, reported_p_text = p_text, statistic_text = f$statistic_text)
       data.frame(source = f$source, test_type = f$test_type, statistic = f$statistic,
                 df1 = f$df1, df2 = f$df2, p_operator = f$p_operator, p_value = f$p_value,
                 computed_p = v$computed_p, verdict = v$verdict, line = f$line,

@@ -4,7 +4,7 @@
  "logit_tolerance": 0.001,
  "model": "gru-crf",
  "model_input_note": "The `model` and `model_logits` sections tag the text after `statcheck_ml.data.normalise` -- the whitespace-folding pass -- not after `statcheck_ml.normalize.normalize` (the reflow and operator-canonicalisation pass used by `Pipeline.run_text`). This mirrors `evalutil.model_predictions`, which is what the phase-11 evaluator scores the model with. Each case's `text` field is the string the model actually saw.",
- "pvalue_rounding_rule": "reported_p_text is the p-value exactly as written, for example \".03\". It is used to learn how many decimals were reported, so the comparison allows for the rounding the author applied. The author rounded. A reported .03 stands for any value that rounds to .03 at the same number of decimals.",
+ "pvalue_rounding_rule": "statcheck's own rule (error_test in statcheck 1.5.0). Both numbers in a paper are rounded and the comparison allows for both. The statistic printed as 1.48 stands for anything in [1.475, 1.485], and each end implies a p-value: low_p from the end further from zero, up_p from the end nearer it. With p reported as `=`, the result is consistent when the reported p lies in [round(low_p, p_dec), round(up_p, p_dec)], where p_dec is the decimals of the p-value as written. With `<` it is consistent when reported_p >= low_p, with `>` when reported_p <= up_p. `ns` reads as p > alpha. A p reported as zero or less is an error whatever the computed value is. The verdict is decision_error when the reported and the computed p fall on opposite sides of alpha.",
  "sections": {
   "extract": [
    {
@@ -20884,6 +20884,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 11.07,
+    "statistic_text": "11.07",
     "test_type": "chi2"
    },
    {
@@ -20897,6 +20898,7 @@
     "p_operator": "=",
     "p_text": ".01",
     "statistic": 2.0,
+    "statistic_text": "2.0",
     "test_type": "chi2"
    },
    {
@@ -20910,6 +20912,7 @@
     "p_operator": "=",
     "p_text": ".10",
     "statistic": 1050.0,
+    "statistic_text": "1050.0",
     "test_type": "chi2"
    },
    {
@@ -20923,6 +20926,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 5.0,
+    "statistic_text": "5.0",
     "test_type": "chi2"
    },
    {
@@ -20936,6 +20940,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 3.84,
+    "statistic_text": "3.84",
     "test_type": "chi2"
    },
    {
@@ -20949,6 +20954,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 500.0,
+    "statistic_text": "500.0",
     "test_type": "chi2"
    },
    {
@@ -20962,6 +20968,7 @@
     "p_operator": ">",
     "p_text": ".50",
     "statistic": 1.0,
+    "statistic_text": "1.0",
     "test_type": "chi2"
    },
    {
@@ -20975,6 +20982,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 20.0,
+    "statistic_text": "20.0",
     "test_type": "chi2"
    },
    {
@@ -20982,12 +20990,13 @@
     "df2": null,
     "expected": {
      "computed_p": 1.3800570312932553e-06,
-     "verdict": "consistent"
+     "verdict": "inconsistent"
     },
     "name": "chi2-p-text-zero",
     "p_operator": "=",
     "p_text": "0",
     "statistic": 30.0,
+    "statistic_text": "30.0",
     "test_type": "chi2"
    },
    {
@@ -21001,6 +21010,7 @@
     "p_operator": "=",
     "p_text": ".001",
     "statistic": 6.2,
+    "statistic_text": "6.2",
     "test_type": "f"
    },
    {
@@ -21014,6 +21024,7 @@
     "p_operator": "=",
     "p_text": ".03",
     "statistic": 4.11,
+    "statistic_text": "4.11",
     "test_type": "f"
    },
    {
@@ -21027,6 +21038,7 @@
     "p_operator": "=",
     "p_text": ".01",
     "statistic": 1.2,
+    "statistic_text": "1.2",
     "test_type": "f"
    },
    {
@@ -21040,6 +21052,7 @@
     "p_operator": "=",
     "p_text": ".03",
     "statistic": 5.0,
+    "statistic_text": "5.0",
     "test_type": "f"
    },
    {
@@ -21053,6 +21066,7 @@
     "p_operator": "=",
     "p_text": ".30",
     "statistic": 5.0,
+    "statistic_text": "5.0",
     "test_type": "f"
    },
    {
@@ -21066,6 +21080,7 @@
     "p_operator": "=",
     "p_text": ".11",
     "statistic": 2.0,
+    "statistic_text": "2.0",
     "test_type": "f"
    },
    {
@@ -21079,6 +21094,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 5.0,
+    "statistic_text": "5.0",
     "test_type": "f"
    },
    {
@@ -21092,6 +21108,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 150.0,
+    "statistic_text": "150.0",
     "test_type": "f"
    },
    {
@@ -21105,6 +21122,7 @@
     "p_operator": ">",
     "p_text": ".10",
     "statistic": 0.8,
+    "statistic_text": "0.8",
     "test_type": "f"
    },
    {
@@ -21118,6 +21136,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 9.0,
+    "statistic_text": "9.0",
     "test_type": "f"
    },
    {
@@ -21125,12 +21144,69 @@
     "df2": 30,
     "expected": {
      "computed_p": 3.02237411141457e-06,
-     "verdict": "consistent"
+     "verdict": "inconsistent"
     },
     "name": "f-p-text-zero",
     "p_operator": "=",
     "p_text": "0",
     "statistic": 20.0,
+    "statistic_text": "20.0",
+    "test_type": "f"
+   },
+   {
+    "df1": 178,
+    "df2": null,
+    "expected": {
+     "computed_p": 1.3657613228250685e-06,
+     "verdict": "decision_error"
+    },
+    "name": "ns-contradicted",
+    "p_operator": "ns",
+    "p_text": null,
+    "statistic": 5.0,
+    "statistic_text": "5.0",
+    "test_type": "t"
+   },
+   {
+    "df1": 178,
+    "df2": null,
+    "expected": {
+     "computed_p": 0.5898719768421473,
+     "verdict": "consistent"
+    },
+    "name": "ns-not-significant",
+    "p_operator": "ns",
+    "p_text": null,
+    "statistic": 0.54,
+    "statistic_text": "0.54",
+    "test_type": "t"
+   },
+   {
+    "df1": 30,
+    "df2": null,
+    "expected": {
+     "computed_p": 5.580185415199261e-13,
+     "verdict": "inconsistent"
+    },
+    "name": "p-reported-zero",
+    "p_operator": "=",
+    "p_text": "0",
+    "statistic": 12.0,
+    "statistic_text": "12.0",
+    "test_type": "t"
+   },
+   {
+    "df1": 1,
+    "df2": 80,
+    "expected": {
+     "computed_p": 8.120104067806882e-24,
+     "verdict": "inconsistent"
+    },
+    "name": "p-reported-zero-decimals",
+    "p_operator": "=",
+    "p_text": ".000",
+    "statistic": 205.634,
+    "statistic_text": "205.634",
     "test_type": "f"
    },
    {
@@ -21144,6 +21220,7 @@
     "p_operator": "=",
     "p_text": ".075",
     "statistic": 10.0,
+    "statistic_text": "10.0",
     "test_type": "q"
    },
    {
@@ -21157,6 +21234,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 3.84,
+    "statistic_text": "3.84",
     "test_type": "q"
    },
    {
@@ -21170,6 +21248,7 @@
     "p_operator": "=",
     "p_text": ".01",
     "statistic": 6.63,
+    "statistic_text": "6.63",
     "test_type": "q"
    },
    {
@@ -21183,6 +21262,7 @@
     "p_operator": ">",
     "p_text": ".90",
     "statistic": 2.0,
+    "statistic_text": "2.0",
     "test_type": "q"
    },
    {
@@ -21196,6 +21276,7 @@
     "p_operator": "<",
     "p_text": ".01",
     "statistic": 25.0,
+    "statistic_text": "25.0",
     "test_type": "q"
    },
    {
@@ -21203,12 +21284,13 @@
     "df2": null,
     "expected": {
      "computed_p": 4.5551495055892125e-07,
-     "verdict": "consistent"
+     "verdict": "inconsistent"
     },
     "name": "q-p-text-dot000",
     "p_operator": "=",
     "p_text": ".000",
     "statistic": 40.0,
+    "statistic_text": "40.0",
     "test_type": "q"
    },
    {
@@ -21222,6 +21304,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": null,
+    "statistic_text": null,
     "test_type": "q"
    },
    {
@@ -21229,12 +21312,13 @@
     "df2": null,
     "expected": {
      "computed_p": 0.0031582410983342028,
-     "verdict": "inconsistent"
+     "verdict": "consistent"
     },
     "name": "r-basic-negative",
     "p_operator": "=",
     "p_text": ".005",
     "statistic": -0.6,
+    "statistic_text": "-0.6",
     "test_type": "r"
    },
    {
@@ -21242,12 +21326,13 @@
     "df2": null,
     "expected": {
      "computed_p": 0.0035685233088176825,
-     "verdict": "inconsistent"
+     "verdict": "consistent"
     },
     "name": "r-basic-positive",
     "p_operator": "=",
     "p_text": ".005",
     "statistic": 0.5,
+    "statistic_text": "0.5",
     "test_type": "r"
    },
    {
@@ -21261,6 +21346,7 @@
     "p_operator": "=",
     "p_text": ".11",
     "statistic": 0.05,
+    "statistic_text": "0.05",
     "test_type": "r"
    },
    {
@@ -21274,6 +21360,7 @@
     "p_operator": "=",
     "p_text": ".29",
     "statistic": 0.9,
+    "statistic_text": "0.9",
     "test_type": "r"
    },
    {
@@ -21287,6 +21374,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": -1.0,
+    "statistic_text": "-1.0",
     "test_type": "r"
    },
    {
@@ -21300,6 +21388,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 1.0,
+    "statistic_text": "1.0",
     "test_type": "r"
    },
    {
@@ -21313,6 +21402,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 0.999,
+    "statistic_text": "0.999",
     "test_type": "r"
    },
    {
@@ -21326,6 +21416,7 @@
     "p_operator": ">",
     "p_text": ".50",
     "statistic": 0.05,
+    "statistic_text": "0.05",
     "test_type": "r"
    },
    {
@@ -21339,6 +21430,7 @@
     "p_operator": "<",
     "p_text": ".05",
     "statistic": 0.4,
+    "statistic_text": "0.4",
     "test_type": "r"
    },
    {
@@ -21352,7 +21444,78 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": null,
+    "statistic_text": null,
     "test_type": "r"
+   },
+   {
+    "df1": 8,
+    "df2": null,
+    "expected": {
+     "computed_p": 0.20742997628056142,
+     "verdict": "consistent"
+    },
+    "name": "rounding-chi2-edge",
+    "p_operator": "=",
+    "p_text": ".21",
+    "statistic": 10.9,
+    "statistic_text": "10.9",
+    "test_type": "chi2"
+   },
+   {
+    "df1": 83,
+    "df2": null,
+    "expected": {
+     "computed_p": 1.5540573711364576e-05,
+     "verdict": "consistent"
+    },
+    "name": "rounding-r-edge",
+    "p_operator": "<",
+    "p_text": ".001",
+    "statistic": -0.45,
+    "statistic_text": "-0.45",
+    "test_type": "r"
+   },
+   {
+    "df1": 67,
+    "df2": null,
+    "expected": {
+     "computed_p": 0.14356030539888653,
+     "verdict": "consistent"
+    },
+    "name": "rounding-stat-2dp",
+    "p_operator": "=",
+    "p_text": ".143",
+    "statistic": 1.48,
+    "statistic_text": "1.48",
+    "test_type": "t"
+   },
+   {
+    "df1": 67,
+    "df2": null,
+    "expected": {
+     "computed_p": 0.14356030539888653,
+     "verdict": "inconsistent"
+    },
+    "name": "rounding-stat-4dp",
+    "p_operator": "=",
+    "p_text": ".143",
+    "statistic": 1.48,
+    "statistic_text": "1.4800",
+    "test_type": "t"
+   },
+   {
+    "df1": 2,
+    "df2": 117,
+    "expected": {
+     "computed_p": 0.01150271550999033,
+     "verdict": "consistent"
+    },
+    "name": "rounding-wide-f",
+    "p_operator": "=",
+    "p_text": ".012",
+    "statistic": 4.64,
+    "statistic_text": "4.64",
+    "test_type": "f"
    },
    {
     "df1": 60,
@@ -21365,6 +21528,7 @@
     "p_operator": "=",
     "p_text": ".08",
     "statistic": 1.8,
+    "statistic_text": "1.8",
     "test_type": "t"
    },
    {
@@ -21378,6 +21542,7 @@
     "p_operator": "=",
     "p_text": ".02",
     "statistic": 2.5,
+    "statistic_text": "2.5",
     "test_type": "t"
    },
    {
@@ -21385,12 +21550,13 @@
     "df2": null,
     "expected": {
      "computed_p": 0.06893752429531219,
-     "verdict": "inconsistent"
+     "verdict": "consistent"
     },
     "name": "t-basic-small-df",
     "p_operator": "=",
     "p_text": ".06",
     "statistic": 2.1,
+    "statistic_text": "2.1",
     "test_type": "t"
    },
    {
@@ -21404,6 +21570,7 @@
     "p_operator": "=",
     "p_text": ".01",
     "statistic": 1.5,
+    "statistic_text": "1.5",
     "test_type": "t"
    },
    {
@@ -21417,6 +21584,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 1.96,
+    "statistic_text": "1.96",
     "test_type": "t"
    },
    {
@@ -21430,6 +21598,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 12.0,
+    "statistic_text": "12.0",
     "test_type": "t"
    },
    {
@@ -21443,6 +21612,7 @@
     "p_operator": "<",
     "p_text": ".001",
     "statistic": 40.0,
+    "statistic_text": "40.0",
     "test_type": "t"
    },
    {
@@ -21456,6 +21626,7 @@
     "p_operator": "=",
     "p_text": ".005",
     "statistic": -3.0,
+    "statistic_text": "-3.0",
     "test_type": "t"
    },
    {
@@ -21469,6 +21640,7 @@
     "p_operator": ">",
     "p_text": ".10",
     "statistic": 0.5,
+    "statistic_text": "0.5",
     "test_type": "t"
    },
    {
@@ -21482,6 +21654,7 @@
     "p_operator": "<",
     "p_text": ".01",
     "statistic": 3.2,
+    "statistic_text": "3.2",
     "test_type": "t"
    },
    {
@@ -21495,6 +21668,7 @@
     "p_operator": "=",
     "p_text": ".1492",
     "statistic": 1.5,
+    "statistic_text": "1.5",
     "test_type": "t"
    },
    {
@@ -21508,6 +21682,7 @@
     "p_operator": "=",
     "p_text": ".1",
     "statistic": 1.5,
+    "statistic_text": "1.5",
     "test_type": "t"
    },
    {
@@ -21515,12 +21690,13 @@
     "df2": null,
     "expected": {
      "computed_p": 7.243699930416565e-06,
-     "verdict": "consistent"
+     "verdict": "inconsistent"
     },
     "name": "t-p-text-dot-000",
     "p_operator": "=",
     "p_text": ".000",
     "statistic": 6.0,
+    "statistic_text": "6.0",
     "test_type": "t"
    },
    {
@@ -21534,6 +21710,7 @@
     "p_operator": "<",
     "p_text": "<.001",
     "statistic": 6.0,
+    "statistic_text": "6.0",
     "test_type": "t"
    },
    {
@@ -21547,6 +21724,7 @@
     "p_operator": "=",
     "p_text": "0",
     "statistic": 0.02,
+    "statistic_text": "0.02",
     "test_type": "t"
    },
    {
@@ -21560,6 +21738,7 @@
     "p_operator": "=",
     "p_text": ".149",
     "statistic": 1.5,
+    "statistic_text": "1.5",
     "test_type": "t"
    },
    {
@@ -21567,12 +21746,13 @@
     "df2": null,
     "expected": {
      "computed_p": 0.1492357711692524,
-     "verdict": "inconsistent"
+     "verdict": "consistent"
     },
     "name": "t-p-two-decimal",
     "p_operator": "=",
     "p_text": ".14",
     "statistic": 1.5,
+    "statistic_text": "1.5",
     "test_type": "t"
    },
    {
@@ -21586,6 +21766,7 @@
     "p_operator": null,
     "p_text": null,
     "statistic": 2.0,
+    "statistic_text": "2.0",
     "test_type": "t"
    },
    {
@@ -21599,6 +21780,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": null,
+    "statistic_text": null,
     "test_type": "t"
    },
    {
@@ -21612,6 +21794,7 @@
     "p_operator": "=",
     "p_text": ".05",
     "statistic": 1.96,
+    "statistic_text": "1.96",
     "test_type": "z"
    },
    {
@@ -21625,6 +21808,7 @@
     "p_operator": "=",
     "p_text": ".01",
     "statistic": 2.58,
+    "statistic_text": "2.58",
     "test_type": "z"
    },
    {
@@ -21638,6 +21822,7 @@
     "p_operator": "=",
     "p_text": ".10",
     "statistic": -1.64,
+    "statistic_text": "-1.64",
     "test_type": "z"
    },
    {
@@ -21651,6 +21836,7 @@
     "p_operator": "=",
     "p_text": ".62",
     "statistic": 0.5,
+    "statistic_text": "0.5",
     "test_type": "z"
    },
    {
@@ -21664,6 +21850,7 @@
     "p_operator": ">",
     "p_text": ".50",
     "statistic": 0.1,
+    "statistic_text": "0.1",
     "test_type": "z"
    },
    {
@@ -21677,6 +21864,7 @@
     "p_operator": "<",
     "p_text": ".01",
     "statistic": 3.0,
+    "statistic_text": "3.0",
     "test_type": "z"
    },
    {
@@ -21690,6 +21878,7 @@
     "p_operator": "<",
     "p_text": "<.001",
     "statistic": 5.0,
+    "statistic_text": "5.0",
     "test_type": "z"
    },
    {
@@ -21703,6 +21892,7 @@
     "p_operator": null,
     "p_text": null,
     "statistic": 2.0,
+    "statistic_text": "2.0",
     "test_type": "z"
    }
   ],

@@ -32,3 +32,14 @@
   `tests/testthat/test-check.R`.
 * A GitHub Actions workflow runs `R CMD check` on Windows, macOS, and
   Ubuntu on every push.
+* `sc_verdict()` now follows statcheck's own rounding rule (`error_test` in
+  statcheck 1.5.0). Before this fix the check allowed only for the rounding
+  of the reported p-value. statcheck also allows for the rounding of the
+  test statistic itself: `t(67) = 1.48` stands for a true statistic
+  anywhere in `[1.475, 1.485]`, and `p = .143` beside it is correct because
+  that whole range's p-value rounds to `.143`. A result this package once
+  called `"inconsistent"` can now come back `"consistent"`, matching what
+  statcheck itself would say. The new `sc_rounding_interval()` computes the
+  range, and `sc_verdict()` gained `statistic_text` and `p_zero_error`
+  arguments; `sc_check_text()` now passes the statistic and the p-value as
+  they were printed, not only the p-value.

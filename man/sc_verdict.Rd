@@ -8,7 +8,9 @@ sc_verdict(
   result,
   alpha = 0.05,
   p_equal_alpha_sig = TRUE,
-  reported_p_text = NULL
+  reported_p_text = NULL,
+  statistic_text = NULL,
+  p_zero_error = TRUE
 )
 }
 \arguments{
@@ -20,6 +22,12 @@ sc_verdict(
 significant.}
 
 \item{reported_p_text}{The p-value as written in the source text.}
+
+\item{statistic_text}{The test statistic as written in the source text.}
+
+\item{p_zero_error}{Whether a reported p-value at or below zero is always
+an error. statcheck always treats it this way; the flag exists so a
+caller can turn the rule off for a study of its own.}
 }
 \value{
 A list with \code{verdict} (one of \code{"consistent"}, \code{"inconsistent"},
@@ -32,15 +40,30 @@ point (that one is \code{\link[=sc_check_text]{sc_check_text()}}).
 }
 \details{
 \code{result} is a list with \code{test_type}, \code{statistic}, \code{df1}, \code{df2},
-\code{p_operator} (one of \code{"="}, \code{"<"}, \code{">"}), \code{p_value}, and optionally
-\code{one_tailed}. A field the caller leaves out is treated as absent, the same
-as \code{NA}.
+\code{p_operator} (one of \code{"="}, \code{"<"}, \code{">"}, or \code{"ns"}), \code{p_value}, and
+optionally \code{one_tailed}. A field the caller leaves out is treated as
+absent, the same as \code{NA}.
 
-\code{reported_p_text} is the p-value exactly as written, for example \code{".03"}.
-It is used to learn how many decimals were reported, so the comparison
-allows for the rounding the author applied: a reported \code{.03} stands for
-any value that rounds to \code{.03} at the same number of decimals. When it is
-not given, the decimals are read from \code{result$p_value} instead.
+The rule is statcheck's own (\code{error_test} and \code{decision_error_test} in
+statcheck 1.5.0), because statcheck is the baseline this project is
+measured against and its convention is what a reader expects. Both
+numbers in a paper are rounded, and the comparison allows for both:
+\code{reported_p_text} gives the decimals of the p-value, \code{statistic_text} the
+decimals of the statistic (see \code{\link[=sc_rounding_interval]{sc_rounding_interval()}}). Without them
+the decimals are read from the numbers themselves, which is right
+whenever they were parsed from the text they were printed as.
+
+\code{"ns"} is a claim about alpha, not a number: the paper says the result was
+not significant. statcheck reads it as \code{p > alpha}, and so does this. A
+reported p at or below zero is always an error, whatever the computed
+value is, because no test gives exactly zero.
+
+An inconsistency is not the same as a wrong conclusion. The verdict is
+\code{"decision_error"} when the reported and the computed p-value fall on
+opposite sides of \code{alpha} -- decided on the computed value itself, not on
+the rounding interval, because the interval says whether the two numbers
+can agree and alpha says what the paper concluded -- and \code{"inconsistent"}
+when they disagree without changing what the paper claims.
 }
 \examples{
 sc_verdict(list(test_type = "f", statistic = 4.11, df1 = 2, df2 = 87,

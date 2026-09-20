@@ -142,27 +142,97 @@ sc_is_significant <- function(p, alpha = 0.05, p_equal_alpha_sig = TRUE) {
   if (p_equal_alpha_sig) p <= alpha else p < alpha
 }
 
+#' The p-values a statistic could imply, given how it was rounded
+#'
+#' A paper writes `t(67) = 1.48`. The true statistic is anywhere in
+#' `[1.475, 1.485]`, and each end implies a different p-value. statcheck
+#' compares the reported p against that whole interval (`error_test` in
+#' statcheck 1.5.0), and this port must do the same or it calls a correctly
+#' reported result an error.
+#'
+#' @param result A list describing one reported result, as in [sc_verdict()].
+#' @param statistic_text The statistic exactly as printed, such as `"1.48"`.
+#'   When it is not given, the decimals are read from `result$statistic`
+#'   itself, formatted with `format(x, scientific = FALSE)` -- `2.45` gives
+#'   2 decimals and `5.1` gives 1, which is right whenever the number was
+#'   parsed from the text it was printed as. A whole number loses its
+#'   trailing zero this way (`5` reads as 0 decimals, not the 1 a paper's own
+#'   "5.0" would have printed), so a caller that has the printed text should
+#'   always pass it.
+#' @return A list with `low_p` and `up_p`, or both `NA_real_` when no p can
+#'   be computed for either end of the interval.
+#' @examples
+#' sc_rounding_interval(list(test_type = "t", statistic = 1.48, df1 = 67),
+#'                      statistic_text = "1.48")
+#' @export
+sc_rounding_interval <- function(result, statistic_text = NULL) {
+  statistic <- result$statistic
+  if (is.null(statistic) || is.na(statistic)) return(list(low_p = NA_real_, up_p = NA_real_))
+
+  text <- if (!is.null(statistic_text)) statistic_text else format(statistic, scientific = FALSE)
+  decimals <- p_decimals(text)
+  half <- 0.5 / (10 ^ decimals)
+
+  or_na <- function(x) if (is.null(x)) NA_real_ else x
+  df1 <- or_na(result$df1)
+  df2 <- or_na(result$df2)
+  one_tailed <- isTRUE(result$one_tailed)
+
+  # The end nearer zero implies the larger p-value, so a negative statistic
+  # swaps which end is which.
+  if (statistic >= 0) {
+    near <- statistic - half
+    far <- statistic + half
+  } else {
+    near <- statistic + half
+    far <- statistic - half
+  }
+  up_p <- sc_compute_p(result$test_type, near, df1, df2, one_tailed)
+  low_p <- sc_compute_p(result$test_type, far, df1, df2, one_tailed)
+  if (is.na(up_p) || is.na(low_p)) return(list(low_p = NA_real_, up_p = NA_real_))
+  list(low_p = low_p, up_p = up_p)
+}
+
 #' Compare a reported p-value with the one its statistic implies
 #'
 #' NAME NOTE: this is the arithmetic check, not the pipeline's PDF entry
 #' point (that one is [sc_check_text()]).
 #'
 #' `result` is a list with `test_type`, `statistic`, `df1`, `df2`,
-#' `p_operator` (one of `"="`, `"<"`, `">"`), `p_value`, and optionally
-#' `one_tailed`. A field the caller leaves out is treated as absent, the same
-#' as `NA`.
+#' `p_operator` (one of `"="`, `"<"`, `">"`, or `"ns"`), `p_value`, and
+#' optionally `one_tailed`. A field the caller leaves out is treated as
+#' absent, the same as `NA`.
 #'
-#' `reported_p_text` is the p-value exactly as written, for example `".03"`.
-#' It is used to learn how many decimals were reported, so the comparison
-#' allows for the rounding the author applied: a reported `.03` stands for
-#' any value that rounds to `.03` at the same number of decimals. When it is
-#' not given, the decimals are read from `result$p_value` instead.
+#' The rule is statcheck's own (`error_test` and `decision_error_test` in
+#' statcheck 1.5.0), because statcheck is the baseline this project is
+#' measured against and its convention is what a reader expects. Both
+#' numbers in a paper are rounded, and the comparison allows for both:
+#' `reported_p_text` gives the decimals of the p-value, `statistic_text` the
+#' decimals of the statistic (see [sc_rounding_interval()]). Without them
+#' the decimals are read from the numbers themselves, which is right
+#' whenever they were parsed from the text they were printed as.
+#'
+#' `"ns"` is a claim about alpha, not a number: the paper says the result was
+#' not significant. statcheck reads it as `p > alpha`, and so does this. A
+#' reported p at or below zero is always an error, whatever the computed
+#' value is, because no test gives exactly zero.
+#'
+#' An inconsistency is not the same as a wrong conclusion. The verdict is
+#' `"decision_error"` when the reported and the computed p-value fall on
+#' opposite sides of `alpha` -- decided on the computed value itself, not on
+#' the rounding interval, because the interval says whether the two numbers
+#' can agree and alpha says what the paper concluded -- and `"inconsistent"`
+#' when they disagree without changing what the paper claims.
 #'
 #' @param result A list describing one reported result.
 #' @param alpha The significance threshold used to judge a decision error.
 #' @param p_equal_alpha_sig Whether a p-value exactly at `alpha` counts as
 #'   significant.
 #' @param reported_p_text The p-value as written in the source text.
+#' @param statistic_text The test statistic as written in the source text.
+#' @param p_zero_error Whether a reported p-value at or below zero is always
+#'   an error. statcheck always treats it this way; the flag exists so a
+#'   caller can turn the rule off for a study of its own.
 #' @return A list with `verdict` (one of `"consistent"`, `"inconsistent"`,
 #'   `"decision_error"`, `"undecidable"`), `computed_p`, `reported_p`,
 #'   `reason`, and `missing` (the parts the result did not carry).
@@ -171,7 +241,8 @@ sc_is_significant <- function(p, alpha = 0.05, p_equal_alpha_sig = TRUE) {
 #'                 p_operator = "=", p_value = 0.03))
 #' @export
 sc_verdict <- function(result, alpha = 0.05, p_equal_alpha_sig = TRUE,
-                       reported_p_text = NULL) {
+                       reported_p_text = NULL, statistic_text = NULL,
+                       p_zero_error = TRUE) {
   # A list may omit a field instead of setting it to NA; both mean absent.
   or_na <- function(x) if (is.null(x)) NA_real_ else x
   computed <- sc_compute_p(result$test_type, or_na(result$statistic), or_na(result$df1),
@@ -186,43 +257,61 @@ sc_verdict <- function(result, alpha = 0.05, p_equal_alpha_sig = TRUE,
     return(list(verdict = UNDECIDABLE, computed_p = NA_real_, reported_p = p_value,
                 reason = reason, missing = absent))
   }
-  if (is.na(p_value) || !(p_operator %in% c("=", "<", ">"))) {
+
+  if (identical(p_operator, "ns")) {
+    reported <- alpha
+    op <- ">"
+  } else if (is.na(p_value) || !(p_operator %in% c("=", "<", ">"))) {
     reason <- describe_missing(absent)
     if (!nzchar(reason)) reason <- "there is no reported p-value to compare against"
     return(list(verdict = UNDECIDABLE, computed_p = computed, reported_p = p_value,
                 reason = reason, missing = absent))
-  }
-
-  reported <- p_value
-  op <- p_operator
-
-  if (op == "=") {
-    nd <- p_decimals(if (!is.null(reported_p_text)) reported_p_text else reported)
-    tol <- if (nd > 0) 0.5 * 10 ^ (-nd) else 0.5
-    agrees <- abs(computed - reported) <= tol
-  } else if (op == "<") {
-    agrees <- computed < reported
   } else {
-    agrees <- computed > reported
+    reported <- p_value
+    op <- p_operator
   }
 
-  if (agrees) {
+  interval <- sc_rounding_interval(result, statistic_text)
+  low_p <- interval$low_p
+  up_p <- interval$up_p
+  if (is.na(low_p)) {
+    low_p <- computed
+    up_p <- computed
+  }
+
+  if (p_zero_error && reported <= 0) {
+    # No test gives a p-value of exactly zero, so the paper reports a number
+    # that cannot be right, however small the computed value is.
+    error <- TRUE
+  } else if (op == "=") {
+    nd <- p_decimals(if (!is.null(reported_p_text)) reported_p_text else reported)
+    error <- reported > round(up_p, nd) || reported < round(low_p, nd)
+  } else if (op == "<") {
+    error <- reported < low_p
+  } else {
+    error <- reported > up_p
+  }
+
+  if (!error) {
     return(list(verdict = CONSISTENT, computed_p = computed, reported_p = reported,
                 reason = "", missing = character(0)))
   }
 
-  # The values disagree. A disagreement that also flips the conclusion is
-  # reported separately, because it changes what the paper claims.
-  reported_sig <- if (op == "=") {
-    sc_is_significant(reported, alpha, p_equal_alpha_sig)
-  } else if (op == "<") {
-    reported <= alpha
-  } else {
-    FALSE
-  }
+  # The values disagree. statcheck decides significance on the computed
+  # value itself, not on the interval, so a disagreement that also flips the
+  # conclusion is reported separately, because it changes what the paper
+  # claims.
   computed_sig <- sc_is_significant(computed, alpha, p_equal_alpha_sig)
+  if (op == "=") {
+    reported_sig <- sc_is_significant(reported, alpha, p_equal_alpha_sig)
+    decision_error <- reported_sig != computed_sig
+  } else if (op == "<") {
+    decision_error <- reported <= alpha && !computed_sig
+  } else {
+    decision_error <- reported >= alpha && computed_sig
+  }
 
-  if (reported_sig != computed_sig) {
+  if (decision_error) {
     return(list(verdict = DECISION_ERROR, computed_p = computed, reported_p = reported,
                 reason = "the reported and computed p-values disagree about significance",
                 missing = character(0)))
