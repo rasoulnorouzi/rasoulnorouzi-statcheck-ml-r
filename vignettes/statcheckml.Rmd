@@ -32,7 +32,7 @@ what the rule could not. No person checked a label by hand, and there is no
 human gold set. The mother project's `PLAN.md` calls this the bronze tier,
 and reports every number against it, never against a claim of ground truth.
 
-Measured on the holdout (327 results, 200 documents), the cascade -- the
+Measured on the holdout (576 windows from 515 documents, 327 results), the cascade -- the
 pattern baseline after operator repair, plus what the model finds beyond it
 -- reaches F1 0.908 [0.875, 0.937]. The pattern baseline alone reaches 0.636
 after repair and 0.308 on raw text. Source: the mother repository
