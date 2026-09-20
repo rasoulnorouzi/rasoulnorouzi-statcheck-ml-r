@@ -11,6 +11,11 @@ reported and the recomputed p-values agree. The model only finds results;
 it never judges them, so the verdict comes from closed-form mathematics in
 every case.
 
+A full walkthrough -- install, the stages on a damaged sentence, every
+exported function, reading a verdict, choosing a model, and a batch script
+-- is `vignette("statcheckml")` after install, or the rendered copy at
+[`docs/TUTORIAL.md`](docs/TUTORIAL.md).
+
 ## Install
 
 statcheckml is not yet on CRAN.
