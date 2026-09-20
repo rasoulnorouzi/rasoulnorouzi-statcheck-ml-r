@@ -172,8 +172,10 @@ sc_is_significant <- function(p, alpha = 0.05, p_equal_alpha_sig = TRUE) {
 #' @export
 sc_verdict <- function(result, alpha = 0.05, p_equal_alpha_sig = TRUE,
                        reported_p_text = NULL) {
-  computed <- sc_compute_p(result$test_type, result$statistic, result$df1,
-                           result$df2, isTRUE(result$one_tailed))
+  # A list may omit a field instead of setting it to NA; both mean absent.
+  or_na <- function(x) if (is.null(x)) NA_real_ else x
+  computed <- sc_compute_p(result$test_type, or_na(result$statistic), or_na(result$df1),
+                           or_na(result$df2), isTRUE(result$one_tailed))
   absent <- missing_parts(result)
   p_value <- if (is.null(result$p_value)) NA_real_ else result$p_value
   p_operator <- if (is.null(result$p_operator)) NA_character_ else result$p_operator

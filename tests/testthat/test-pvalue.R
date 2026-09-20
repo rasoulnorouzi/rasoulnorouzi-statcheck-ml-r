@@ -43,3 +43,10 @@ test_that("sc_compute_p never returns NaN", {
   expect_true(is.na(sc_compute_p("r", 1.0, 15)))
   expect_true(is.na(sc_compute_p("bogus", 5, 2)))
 })
+
+test_that("a field left out of the result list counts as absent", {
+   v <- sc_verdict(list(test_type = "t", statistic = 2.45, df1 = 34, p_operator = "=", p_value = 0.02))
+   expect_identical(v$verdict, "consistent")
+   v <- sc_verdict(list(test_type = "chi2", statistic = 8.69, p_operator = "=", p_value = 0.003))
+   expect_identical(v$verdict, "undecidable")
+ })
