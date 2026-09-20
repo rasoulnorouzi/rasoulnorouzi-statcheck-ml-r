@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "_comment": "Glyph table for symbol fonts with no ToUnicode map. Keyed by font name and character code. Built from the corpus, not from a published font specification.",
+  "documents_scanned": 200,
+  "entries": {
+    "MathematicalPi-Six|2": {
+      "char": "=",
+      "font": "MathematicalPi-Six",
+      "code": 2,
+      "evidence": "statistic position",
+      "support": 13
+    },
+    "Universal-GreekwithMathP|4": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 4,
+      "evidence": "statistic position",
+      "support": 8
+    },
+    "Universal-GreekwithMathP|3": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 3,
+      "evidence": "statistic position",
+      "support": 66
+    },
+    "AdvP4C4E74|3": {
+      "char": "=",
+      "font": "AdvP4C4E74",
+      "code": 3,
+      "evidence": "statistic position",
+      "support": 16
+    },
+    "AdvP4C4E74|2": {
+      "char": "=",
+      "font": "AdvP4C4E74",
+      "code": 2,
+      "evidence": "statistic position",
+      "support": 108
+    },
+    "AdvP4C4E74|188": {
+      "char": "=",
+      "font": "AdvP4C4E74",
+      "code": 188,
+      "evidence": "statistic position",
+      "support": 163
+    },
+    "Universal-GreekwithMathP|2": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 2,
+      "evidence": "statistic position",
+      "support": 185
+    },
+    "Universal-GreekwithMathP|5": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 5,
+      "evidence": "statistic position",
+      "support": 38
+    },
+    "AdvMacMthSyN|2": {
+      "char": "=",
+      "font": "AdvMacMthSyN",
+      "code": 2,
+      "evidence": "statistic position",
+      "support": 105
+    },
+    "Universal-GreekwithMathP|1": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 1,
+      "evidence": "p-value position",
+      "support": 126,
+      "threshold_share": 0.008
+    },
+    "Universal-GreekwithMathP|8": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 8,
+      "evidence": "statistic position",
+      "support": 20
+    },
+    "Universal-GreekwithMathP|7": {
+      "char": "=",
+      "font": "Universal-GreekwithMathP",
+      "code": 7,
+      "evidence": "statistic position",
+      "support": 4
+    },
+    "MathematicalPi-Six|1": {
+      "char": "=",
+      "font": "MathematicalPi-Six",
+      "code": 1,
+      "evidence": "statistic position",
+      "support": 12
+    },
+    "AdvP4C4E74|1": {
+      "char": "=",
+      "font": "AdvP4C4E74",
+      "code": 1,
+      "evidence": "statistic position",
+      "support": 92
+    },
+    "AdvMT_SY|2": {
+      "char": "=",
+      "font": "AdvMT_SY",
+      "code": 2,
+      "evidence": "statistic position",
+      "support": 6
+    },
+    "AdvPSMP4|92": {
+      "char": "<",
+      "font": "AdvPSMP4",
+      "code": 92,
+      "evidence": "p-value position",
+      "support": 33,
+      "threshold_share": 0.939
+    },
+    "AdvP4C4E74|5": {
+      "char": "<",
+      "font": "AdvP4C4E74",
+      "code": 5,
+      "evidence": "p-value position",
+      "support": 8,
+      "threshold_share": 0.875
+    },
+    "AdvMT_SY|188": {
+      "char": "=",
+      "font": "AdvMT_SY",
+      "code": 188,
+      "evidence": "p-value position",
+      "support": 4,
+      "threshold_share": 0.0
+    },
+    "MathTechnicalP01|33": {
+      "char": "<",
+      "font": "MathTechnicalP01",
+      "code": 33,
+      "evidence": "p-value position",
+      "support": 56,
+      "threshold_share": 0.839
+    },
+    "Universal-GreekwithMathPi|2": {
+      "char": "=",
+      "font": "Universal-GreekwithMathPi",
+      "code": 2,
+      "evidence": "p-value position",
+      "support": 10,
+      "threshold_share": 0.0
+    },
+    "MathematicalPi-One|4": {
+      "char": "<",
+      "font": "MathematicalPi-One",
+      "code": 4,
+      "evidence": "p-value position",
+      "support": 5,
+      "threshold_share": 1.0
+    }
+  }
+}

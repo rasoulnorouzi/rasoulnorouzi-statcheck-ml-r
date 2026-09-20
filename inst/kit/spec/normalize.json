@@ -1,0 +1,79 @@
+{
+  "_comment": "Shared text normalisation rules. Python, JavaScript and R read this file. Never restate these rules in a port. The stage exists because each port gets a different PDF engine, and the engines disagree about line breaks and about which character stands for a destroyed operator.",
+  "version": 1,
+  "_why_reflow": "Poppler returns a whole column as one line, and PDF.js returns no lines at all. Every prefilter rule measures one line, so a joined line hides the result inside it. Cutting long lines near a normal width restores the unit the rules expect. No character is added or removed.",
+  "target_line_width": 90,
+  "reflow_trigger_width": 180,
+  "_why_reference_cap": "The bibliography rule discards a line that looks like a reference. A joined column can hold a statistic AND a citation, so the rule discarded both. A real bibliography entry is short, and this cap keeps the rule away from joined lines.",
+  "max_reference_line": 300,
+  "_why_canonical": "PyMuPDF writes a destroyed operator as a control character. Poppler writes the same operator as a letter in the Greek and Coptic block. Inside one document the correspondence is one to one, measured on 50 of 50 documents, so no information is lost and a rename is safe. The model reads characters, so a character it never saw becomes unknown and every feature learned about it is lost.",
+  "canonical_operator_slots": [
+    "\u0001",
+    "\u0002",
+    "\u0003",
+    "\u0004",
+    "\u0005",
+    "\u0006",
+    "\u0007",
+    "\b"
+  ],
+  "operator_site_pattern": "(?<=[)\\]a-zA-Z0-9])\\s*([^\\s])\\s*(?=[-.\u2212]?\\d)",
+  "_why_protected": "These characters carry meaning inside a statistic. A rename would destroy the meaning, so the stage must never touch them.",
+  "protected_symbols": "\u03c7\u03c6\u03d5\u03b1\u03b2\u03b7\u03bc\u03c3\u03c1\u03bb\u2212\u2013\u2014\u00b2\u00b3\u00b0\u2264\u2265\u2248",
+  "text_characters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,;:()[]{}<>=+-*/%$#@!?'\"&_|~^\\`\n\t\r",
+  "_measured": {
+    "corpus": "198 holdout documents, 323 gold results",
+    "engine_holds_the_result": {
+      "pymupdf": 0.929,
+      "pdfium": 0.92,
+      "poppler": 0.889
+    },
+    "prefilter_recall_as_shipped": {
+      "pymupdf": 0.929,
+      "pdfium": 0.907,
+      "poppler": 0.793
+    },
+    "prefilter_recall_with_this_stage": {
+      "pymupdf": 0.929,
+      "pdfium": 0.91,
+      "poppler": 0.879
+    }
+  },
+  "_why_ports": "No PDF engine serves all three ports, so each port names its own. The engine is chosen for what it reads, and then for what it costs the port to ship. Measured on 198 holdout documents with 323 gold results.",
+  "ports": {
+    "python": {
+      "engine": "pymupdf",
+      "package": "pymupdf",
+      "recall": 0.929,
+      "licence": "AGPL-3.0 or commercial",
+      "why": "It reads the most, and the models were trained on its output, so it carries no distribution shift at all.",
+      "alternative": "pdfium"
+    },
+    "r": {
+      "engine": "rpdftools",
+      "package": "pdftools",
+      "recall": 0.912,
+      "licence": "MIT, over poppler under GPL-2",
+      "why": "R has no other maintained PDF reader. It reads more than the poppler command line does, so measure the R port with pdf_text() and never by borrowing a pdftotext number.",
+      "alternative": null
+    },
+    "browser": {
+      "engine": "pdfjs",
+      "package": "pdfjs-dist",
+      "recall": 0.907,
+      "licence": "Apache-2.0",
+      "why": "A browser needs no extra WebAssembly build to use it. PDFium reads 0.009 more and costs a second binary to download, which is the wrong trade for a page that must stay light.",
+      "alternative": "pdfium"
+    }
+  },
+  "engine_alternative": {
+    "pdfium": {
+      "package": "pypdfium2, or a WebAssembly build for the browser",
+      "recall": 0.916,
+      "licence": "BSD-3-Clause and Apache-2.0",
+      "why": "The permissive choice. Use it in place of PyMuPDF when the AGPL licence of PyMuPDF does not suit distribution. It reads 0.013 less than PyMuPDF and it has both a Python and a JavaScript build, so one engine can serve two ports."
+    }
+  },
+  "_why_known_characters": "The renaming reads spec/charmap.json, which holds every character the model can read. A character in it is never renamed, whatever position it stands in. Renaming by position alone caught the copyright sign, the multiplication sign, the curly quotes and the significance star of '* p < .05'. On PyMuPDF text 91 percent of the renames were of characters the model already knew, and what the model found fell from 0.879 to 0.868. The stage exists to bring an unreadable character into the alphabet the model knows, and nothing else.",
+  "known_characters_source": "spec/charmap.json"
+}

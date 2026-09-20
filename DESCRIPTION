@@ -1,0 +1,23 @@
+Package: statcheckml
+Title: R Port of statcheck-ml
+Version: 0.1.0
+Authors@R:
+    person("Rasoul", "Norouzi", role = c("aut", "cre"), email = "rslnorouzi@gmail.com")
+Description: A port of statcheck-ml, a machine-learned replacement for the
+    extraction step of the R package statcheck. The package reads a shared
+    kit of rules and a trained model exported by the mother project, and
+    runs the normalisation and extraction stages that turn text read from a
+    PDF into reported statistical test results.
+License: GPL-3
+Encoding: UTF-8
+Imports:
+    jsonlite,
+    digest
+Suggests:
+    pdftools,
+    R.utils,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.1.0
+Config/roxygen2/version: 8.1.0

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "_comment": "Shared repair rules. Python, JavaScript and R read this file. Never restate these rules in a port. The repair restores an operator the PDF conversion destroyed, and arithmetic decides which operator it was.",
+
+  "_why": "A publisher sets an operator in a font with no ToUnicode map, so the character is lost, but the numbers survive. Every candidate operator is tried, the p-value is recomputed for each, and the mapping that agrees with the reported p-values most often wins. The test is arithmetic, so it does not depend on an annotator.",
+
+  "_measured": {
+    "corpus": "198 holdout documents, damaged results only",
+    "note": "Share of damaged results whose operator can be read, before and after the stage. The normalisation stage runs first, which is why an engine that writes damage as Greek and Coptic letters is repaired at all.",
+    "operator_readable_before": {
+      "pymupdf": 0.167, "pdfium": 0.163, "pdfjs": 0.160,
+      "poppler": 0.134, "rpdftools": 0.146
+    },
+    "operator_readable_after": {
+      "pymupdf": 0.849, "pdfium": 0.602, "pdfjs": 0.840,
+      "poppler": 0.899, "rpdftools": 0.764
+    },
+    "statcheck_results_on_the_holdout": {"raw": 59, "repaired": 158},
+    "cascade_gain": "Statcheck reading raw text adds nothing to the model: 287 results against 287. Reading repaired text it adds 8, and recall rises from 0.911 to 0.937. The repair is the only reason the pattern branch earns its place."
+  },
+
+  "operators": ["=", "<", ">"],
+
+  "_why_suspects": "A character that stands where an operator belongs and is not an operator. The control characters are what the normalisation stage produces, whatever engine read the PDF. The letters are what a converter writes when the glyph maps to a letter instead.",
+  "suspect_characters": {
+    "control_range": [[1, 8], [11, 12], [14, 31]],
+    "literal": ["\u00bc", "\\", "!", "b", "N", "p"]
+  },
+
+  "_why_result_pattern": "One complete result, whose two operators may both be damaged. Both operators must be captured, because the arithmetic needs the statistic and the p-value together to test a mapping.",
+  "result_pattern": "\\b(t|F|r|z|Z|chi2|c2|v2|x2|X2|\u03c72|Q)\\s*\\(\\s*(\\d+(?:\\.\\d+)?)\\s*(?:,\\s*(\\d+(?:\\.\\d+)?)\\s*)?(?:,\\s*[Nn]\\s*[=<>]\\s*[\\d, ]+)?\\)\\s*(SUSPECT|=|<|>)\\s*(-?\\d*\\.?\\d+)[^\\n]{0,40}?\\bp\\s*(SUSPECT|=|<|>)\\s*(-?\\d*\\.?\\d+)",
+  "result_pattern_note": "Replace the token SUSPECT with the character class built from suspect_characters, then compile with the ignore-case flag.",
+
+  "_why_limits": "A document with one or two damaged operators is common. A document with many is more likely to be a pattern that misfired, and trying every combination becomes slow and unreliable.",
+  "max_suspects": 4,
+  "min_testable_results": 3,
+
+  "_why_min_testable": "A mapping chosen from one or two results is chosen by chance. Below this count the stage reports nothing and the caller keeps the text as it is."
+}
