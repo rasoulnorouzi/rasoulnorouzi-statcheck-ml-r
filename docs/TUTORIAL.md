@@ -40,7 +40,7 @@ after repair and 0.308 on raw text. Source: the mother repository
 
 
 ``` r
-remotes::install_github("rasoulnorouzi/statcheck-ml-r")
+remotes::install_github("rasoulnorouzi/rasoulnorouzi-statcheck-ml-r")
 ```
 
 Or from a clone:

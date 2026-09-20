@@ -13,8 +13,8 @@ Description: A port of 'statcheck-ml', a machine-learned replacement for the
     vocabulary, and the p-value constants are exported by the mother
     project and read here, not restated.
 License: GPL-3
-URL: https://github.com/rasoulnorouzi/statcheck-ml-r
-BugReports: https://github.com/rasoulnorouzi/statcheck-ml-r/issues
+URL: https://github.com/rasoulnorouzi/rasoulnorouzi-statcheck-ml-r
+BugReports: https://github.com/rasoulnorouzi/rasoulnorouzi-statcheck-ml-r/issues
 Encoding: UTF-8
 SystemRequirements: poppler-cpp (deb: libpoppler-cpp-dev)
 Imports:

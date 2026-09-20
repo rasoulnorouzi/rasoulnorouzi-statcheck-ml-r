@@ -1,6 +1,6 @@
 # statcheckml
 
-[![R-CMD-check](https://github.com/rasoulnorouzi/statcheck-ml-r/actions/workflows/check.yml/badge.svg)](https://github.com/rasoulnorouzi/statcheck-ml-r/actions/workflows/check.yml)
+[![R-CMD-check](https://github.com/rasoulnorouzi/rasoulnorouzi-statcheck-ml-r/actions/workflows/check.yml/badge.svg)](https://github.com/rasoulnorouzi/rasoulnorouzi-statcheck-ml-r/actions/workflows/check.yml)
 
 statcheckml is the R port of statcheck-ml, a machine-learned replacement for
 the extraction step of the R package statcheck. It reads a PDF or plain
@@ -21,7 +21,7 @@ exported function, reading a verdict, choosing a model, and a batch script
 statcheckml is not yet on CRAN.
 
 ```r
-remotes::install_github("rasoulnorouzi/statcheck-ml-r")
+remotes::install_github("rasoulnorouzi/rasoulnorouzi-statcheck-ml-r")
 ```
 
 Or from a clone:
