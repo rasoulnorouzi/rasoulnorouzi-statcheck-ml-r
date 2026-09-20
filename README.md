@@ -22,7 +22,7 @@ statcheckml is not yet on CRAN.
 | repair a damaged operator | not yet |
 | prefilter a line | not yet |
 | find a result, pattern baseline | yes, `sc_extract()` |
-| find a result, trained model | not yet |
+| find a result, trained model | yes, `sc_tag()` |
 | check a p-value | not yet |
 
 ## Use
@@ -32,7 +32,14 @@ library(statcheckml)
 kit <- sc_kit()
 text <- sc_normalize("The effect was significant, t(28) = 2.87,\np = .006.", kit)
 sc_extract(text, kit)
+
+model <- sc_load_model(kit)
+sc_tag(text, kit, model)[[1]]
 ```
+
+`sc_tag()` takes a whole vector of texts and tags them in one batch, so give
+it a document's windows together rather than one at a time. Load the model
+once with `sc_load_model()` and pass it in.
 
 Every function that reads a rule takes a `kit`. Load one with `sc_kit()`. It
 verifies the rules and the model against `manifest.json` before it returns
