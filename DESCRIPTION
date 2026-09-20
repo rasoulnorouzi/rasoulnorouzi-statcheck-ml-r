@@ -12,7 +12,8 @@ License: GPL-3
 Encoding: UTF-8
 Imports:
     jsonlite,
-    digest
+    digest,
+    stats
 Suggests:
     pdftools,
     R.utils,

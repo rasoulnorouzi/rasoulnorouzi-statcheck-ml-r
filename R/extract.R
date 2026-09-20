@@ -26,8 +26,14 @@ extract_patterns <- function() {
     z = sprintf(
       "\\bz\\s*(?<sop>[=<>])\\s*(?<stat>%s)\\s*,\\s*p\\s*(?<pop>[=<>])\\s*(?<p>%s)",
       NUM, NUM),
+    # `(*UCP)` makes `\b` Unicode-aware: without it, PCRE's ASCII-only view
+    # of "word" characters does not count the Greek chi as one, so `\b`
+    # never matches between it and the space before it, and the whole
+    # alternative silently never fires. Python's `re` treats a `str`
+    # pattern's `\b` as Unicode-aware by default, so this is what makes the
+    # two engines agree, not an added capability.
     chi2 = sprintf(
-      "\\b(?:\u03c7\\s*2|\u03c72|chi2|X2|c2)\\s*\\(\\s*(?<df1>%s)(?:\\s*,\\s*N\\s*[=<>]\\s*(?<n>[\\d,]+))?\\s*\\)\\s*(?<sop>[=<>])\\s*(?<stat>%s)\\s*,\\s*p\\s*(?<pop>[=<>])\\s*(?<p>%s)",
+      "(*UCP)\\b(?:\u03c7\\s*2|\u03c72|chi2|X2|c2)\\s*\\(\\s*(?<df1>%s)(?:\\s*,\\s*N\\s*[=<>]\\s*(?<n>[\\d,]+))?\\s*\\)\\s*(?<sop>[=<>])\\s*(?<stat>%s)\\s*,\\s*p\\s*(?<pop>[=<>])\\s*(?<p>%s)",
       NUM, NUM, NUM),
     q = sprintf(
       "\\bQ(?:w|b)?\\s*\\(\\s*(?<df1>%s)\\s*\\)\\s*(?<sop>[=<>])\\s*(?<stat>%s)\\s*,\\s*p\\s*(?<pop>[=<>])\\s*(?<p>%s)",
