@@ -9,12 +9,21 @@ name: R-CMD-check
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }}
+    name: ${{ matrix.os }} (R ${{ matrix.r }})
 
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        # CRAN's macOS arm64 binaries for R 4.6 are incomplete: pak downloaded a
+        # knitr_1.52.tgz it could not extract, twice. The previous release has
+        # a complete binary set, and testing one release back is worth having.
+        include:
+          - os: windows-latest
+            r: release
+          - os: ubuntu-latest
+            r: release
+          - os: macos-latest
+            r: oldrel
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -26,6 +35,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v2
         with:
+          r-version: ${{ matrix.r }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
