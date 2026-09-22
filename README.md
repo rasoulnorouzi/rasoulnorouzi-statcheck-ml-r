@@ -182,3 +182,12 @@ models: gru-crf
 - The trained model was fit on bronze-tier labels: machine-annotated text,
   never a human-adjudicated gold set. See the mother project's `PLAN.md`
   for the label tiers and what each one means.
+
+## Credit
+
+statcheck-ml stands on [statcheck](https://github.com/MicheleNuijten/statcheck), by
+Michèle B. Nuijten and Sacha Epskamp, with Willem Sleegers, Edoardo Costantini, Paul
+van der Laken, Sean Rife, John Sakaluk, Chris Hartgerink and Steve Haroz. Michèle
+Nuijten, the mother of statcheck, showed that a machine can read the statistics a
+paper reports and catch the ones that do not add up. This project only teaches that
+idea to read a damaged PDF. Thank you.
