@@ -6,7 +6,7 @@ Do not edit a file in this kit here. Change it in the mother repository and expo
 
 Kit version: 2.0.0
 Mother repository: https://github.com/rasoulnorouzi/ml-statcheck
-Mother commit: 49f64536fb66a5952e59be2cefa35a2788f298f0
+Mother commit: 19a3743a9d278463039550ca707ae49d316c60cf
 
 ## Models
 

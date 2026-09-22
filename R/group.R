@@ -170,7 +170,9 @@ group_result_from_parts <- function(parts, number_fn) {
   pop_key <- Find(function(k) startsWith(k, "POP_"), names(parts))
   operator <- if (is.null(pop_key)) NA_character_ else ENTITY_OPERATOR[[pop_key]]
   test_type <- tolower(trimws(if (is.null(parts[["TEST"]])) "" else parts[["TEST"]]))
-  if (!nzchar(test_type)) test_type <- "t"
+  # A span with no test name stays nameless: assuming t turned correct
+  # chi-squares into reported errors.
+  if (!nzchar(test_type)) test_type <- NA_character_
   list(test_type = test_type, statistic = stat,
       df1 = number_fn(parts[["DF1"]]), df2 = number_fn(parts[["DF2"]]),
       p_operator = operator, p_value = number_fn(parts[["PVAL"]]))

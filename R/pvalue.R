@@ -22,7 +22,8 @@ REQUIRED_PARTS <- list(t = "df1", r = "df1", chi2 = "df1", q = "df1",
 # know whether the author omitted it, the PDF conversion destroyed it, or the
 # extraction failed. Saying "the paper does not report a p-value" claims the
 # first, and a reader would act on that claim.
-PART_NAMES <- c(statistic = "no test statistic", df1 = "no degrees of freedom",
+PART_NAMES <- c(test_type = "no test name",
+                statistic = "no test statistic", df1 = "no degrees of freedom",
                 df2 = "no second degrees of freedom", p_value = "no p-value",
                 p_operator = "no operator before the p-value")
 
@@ -100,6 +101,9 @@ missing_parts <- function(result) {
     "" else result$test_type))
 
   absent <- character(0)
+  # Without the test's name no p-value can be computed: the same 7.42 with
+  # df 8 is p = .49 as a chi-square and p = .00007 as a t. It is never guessed.
+  if (!nzchar(test)) absent <- c(absent, "test_type")
   if (is.na(statistic)) absent <- c(absent, "statistic")
   parts <- REQUIRED_PARTS[[test]]
   if (is.null(parts)) parts <- "df1"
