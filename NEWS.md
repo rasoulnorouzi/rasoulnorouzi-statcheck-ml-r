@@ -1,3 +1,17 @@
+# statcheckml (development)
+
+* Reads kit spec version 2. `sc_units()` reads the prefilter `unit` key:
+  with `"passage"`, overlapping windows merge into one passage that the
+  model reads once. `sc_prefilter()` still returns windows and gains
+  `start_line`, `end_line` and `char_start`.
+* The pipeline deduplicates by the overlap of the statistic's character
+  interval, not by the rounded value. Two results with the same value at
+  different places are both kept. Results gain `statistic_start` and
+  `statistic_end`; `sc_extract()` gains `stat_start` and `stat_end`.
+* A find with no test name is a fragment. It is not checked, gets no
+  verdict, and comes back in `attr(x, "fragments")`. `line` is now the
+  first line of the unit, not the triggering line.
+
 # statcheckml 0.1.0
 
 * First release: kit loading and verification, the normalise stage, and the

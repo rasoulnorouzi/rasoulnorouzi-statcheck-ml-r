@@ -15,8 +15,10 @@ kit; the pattern itself is fixed and ships with the package.}
 \value{
 A data frame with one row per result found, ordered by where it
 starts in \code{text}, and the columns \code{test_type}, \code{statistic}, \code{df1},
-\code{df2}, \code{p_operator}, \code{p_value}, all character. Zero rows when nothing
-matches.
+\code{df2}, \code{p_operator}, \code{p_value}, all character, then \code{stat_start} and
+\code{stat_end}, the 0-based half-open interval of the statistic's value in
+\code{text} (the reference's \code{Extraction.stat_start}). Zero rows when
+nothing matches.
 }
 \description{
 Reproduces what the R package statcheck finds: a test statistic reported

@@ -44,6 +44,7 @@ pipeline_group_model <- function(text, tags) {
     if (!is.null(res)) {
       res$statistic_text <- g$parts[["STAT"]]
       res$p_value_text <- g$parts[["PVAL"]]
+      res$statistic_span <- g$stat_span
       rows[[length(rows) + 1L]] <- res
     }
   }
@@ -54,31 +55,76 @@ empty_check_result <- function() {
   data.frame(source = character(0), test_type = character(0), statistic = numeric(0),
             df1 = numeric(0), df2 = numeric(0), p_operator = character(0),
             p_value = numeric(0), computed_p = numeric(0), verdict = character(0),
-            line = integer(0), reason = character(0), stringsAsFactors = FALSE)
+            line = integer(0), reason = character(0),
+            statistic_start = integer(0), statistic_end = integer(0),
+            stringsAsFactors = FALSE)
+}
+
+empty_fragments <- function() {
+  data.frame(source = character(0), test_type = character(0), statistic = numeric(0),
+            df1 = numeric(0), df2 = numeric(0), p_operator = character(0),
+            p_value = numeric(0), line = integer(0),
+            statistic_start = integer(0), statistic_end = integer(0),
+            stringsAsFactors = FALSE)
+}
+
+# A fragment is a find with no test name. It has the columns of a result
+# except the three the check fills in, and it never reaches `sc_verdict()`.
+fragment_frame <- function(fragments) {
+  if (length(fragments) == 0) return(empty_fragments())
+  rows <- lapply(fragments, function(f) {
+    data.frame(source = f$source, test_type = NA_character_, statistic = f$statistic,
+              df1 = f$df1, df2 = f$df2, p_operator = f$p_operator, p_value = f$p_value,
+              line = f$line, statistic_start = f$statistic_span[1],
+              statistic_end = f$statistic_span[2], stringsAsFactors = FALSE)
+  })
+  out <- do.call(rbind, rows)
+  row.names(out) <- NULL
+  out
 }
 
 #' Read a document and check every statistical result in it
 #'
-#' Runs the whole pipeline: [sc_normalize()], [sc_repair()], [sc_prefilter()],
-#' then for each kept window, the pattern extractor ([sc_extract()]) followed
+#' Runs the whole pipeline: [sc_normalize()], [sc_repair()], [sc_units()],
+#' then for each unit, the pattern extractor ([sc_extract()]) followed
 #' by the trained model ([sc_tag()] plus [sc_group()]'s grouping) for
 #' whatever the pattern did not already find, and finally [sc_verdict()] on
-#' every result. A result found by the pattern in one window and again by the
-#' model in another is kept once, by its rounded statistic, the same rule the
-#' mother repository's pipeline uses across the whole document.
+#' every result.
 #'
-#' Every window is tagged in one [sc_tag()] call, because the model is the
+#' A unit is a passage under spec version 2: overlapping windows merge, so
+#' the model reads each character once.
+#'
+#' Deduplication. Every find carries the interval `[start, end)` of its
+#' statistic value, counted in characters over the repaired document with
+#' reference lines blanked. Units are visited in document order, the pattern
+#' before the model in each unit. A find whose interval overlaps one already
+#' emitted is a duplicate and the first stays. Two results with the same
+#' value at different places are both kept. The mother repository defines
+#' the rule in `Pipeline.run_text`. Its fallback for a find with no interval
+#' is not ported, because both finders here always give one.
+#'
+#' Every unit is tagged in one [sc_tag()] call, because the model is the
 #' slow stage and tagging a batch costs little more than tagging one text.
 #'
 #' @param text A document's text.
 #' @param kit A loaded [sc_kit()].
 #' @param model A model from [sc_load_model()]. Loading it costs about a
 #'   second, so a caller checking many documents should load it once.
-#' @return A data frame with one row per result: `source` (`"pattern"` or
-#'   `"model"`), `test_type`, `statistic`, `df1`, `df2`, `p_operator`,
-#'   `p_value`, `computed_p`, `verdict`, `line`, `reason`. Zero rows when the
-#'   document holds nothing checkable. The stage counts (lines seen, windows
-#'   kept, results by source) are attached as the `"stages"` attribute.
+#' @return A data frame with one row per result that has a test name:
+#'   `source` (`"pattern"` or `"model"`), `test_type`, `statistic`, `df1`,
+#'   `df2`, `p_operator`, `p_value`, `computed_p`, `verdict`, `line`,
+#'   `reason`, then `statistic_start` and `statistic_end` (the interval of
+#'   the statistic in the document, 0-based, half-open; the reference's
+#'   `statistic_span`). `line` is the first line of the unit that held the
+#'   result. Zero rows when the document holds nothing checkable.
+#'
+#'   Two attributes are attached. `"stages"` holds the counts: `lines`,
+#'   `windows_kept`, `units_kept`, `by_pattern`, `by_model` and
+#'   `fragments`. `"fragments"` is a data frame of the finds with no test
+#'   name, which are not checked and get no verdict. It has the columns of
+#'   the result except `computed_p`, `verdict` and `reason`, in emission
+#'   order. Deduplication runs over results and fragments together, so
+#'   `by_pattern + by_model` equals `nrow(out) + nrow(fragments)`.
 #' @examples
 #' kit <- sc_kit()
 #' sc_check_text("The effect was significant, t(28) = 2.87, p = .006.", kit)
@@ -87,50 +133,61 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
   normalised <- sc_normalize(text, kit)
   repaired <- sc_repair(normalised, kit)
   windows <- sc_prefilter(repaired$text, kit)
+  units <- sc_units(repaired$text, kit)
 
-  if (nrow(windows) == 0) {
+  if (nrow(units) == 0) {
     model_texts <- character(0)
     tagged <- list()
   } else {
-    model_texts <- vapply(windows$text, sc_model_normalise, character(1), USE.NAMES = FALSE)
+    model_texts <- vapply(units$text, sc_model_normalise, character(1), USE.NAMES = FALSE)
     tagged <- sc_tag(model_texts, kit, model)
   }
 
   found <- list()
-  seen <- numeric(0)  # rounded statistics already emitted, across the whole document
+  taken <- matrix(integer(0), ncol = 2)  # statistic intervals already emitted
   n_pattern <- 0L
   n_model <- 0L
 
-  for (i in seq_len(nrow(windows))) {
-    line_no <- windows$line[i]
+  is_duplicate <- function(span) {
+    any(span[1] < taken[, 2] & taken[, 1] < span[2])
+  }
 
-    pattern_hits <- sc_extract(windows$text[i], kit)
+  for (i in seq_len(nrow(units))) {
+    line_no <- units$line[i]
+    shift <- units$char_start[i]
+
+    pattern_hits <- sc_extract(units$text[i], kit)
     for (r in seq_len(nrow(pattern_hits))) {
-      stat <- sc_parse_number(pattern_hits$statistic[r])
-      key <- if (is.na(stat)) NA_real_ else round(stat, 3)
-      if (key %in% seen) next
-      seen <- c(seen, key)
+      span <- c(pattern_hits$stat_start[r], pattern_hits$stat_end[r]) + shift
+      if (is_duplicate(span)) next
+      taken <- rbind(taken, span)
       # `sc_extract()` returns the raw captured text (character columns), so
       # the statistic and the p-value as they were printed are free to carry
       # alongside the parsed numbers, for the rounding rule in `sc_verdict()`.
       found[[length(found) + 1L]] <- list(
-        source = "pattern", test_type = pattern_hits$test_type[r], statistic = stat,
+        source = "pattern", test_type = pattern_hits$test_type[r],
+        statistic = sc_parse_number(pattern_hits$statistic[r]),
         statistic_text = pattern_hits$statistic[r],
         df1 = sc_parse_number(pattern_hits$df1[r]), df2 = sc_parse_number(pattern_hits$df2[r]),
         p_operator = pattern_hits$p_operator[r], p_value = sc_parse_number(pattern_hits$p_value[r]),
         p_value_text = pattern_hits$p_value[r],
-        line = line_no)
+        line = line_no, statistic_span = span)
       n_pattern <- n_pattern + 1L
     }
 
     for (mr in pipeline_group_model(model_texts[i], tagged[[i]])) {
-      key <- round(mr$statistic, 3)  # always non-NA: pipeline_group_model() drops the rest
-      if (key %in% seen) next
-      seen <- c(seen, key)
+      span <- mr$statistic_span + shift
+      if (is_duplicate(span)) next
+      taken <- rbind(taken, span)
+      mr$statistic_span <- span
       found[[length(found) + 1L]] <- c(list(source = "model"), mr, list(line = line_no))
       n_model <- n_model + 1L
     }
   }
+
+  nameless <- vapply(found, function(f) is.na(f$test_type), logical(1))
+  fragments <- fragment_frame(found[nameless])
+  found <- found[!nameless]
 
   if (length(found) == 0) {
     out <- empty_check_result()
@@ -146,17 +203,21 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
       data.frame(source = f$source, test_type = f$test_type, statistic = f$statistic,
                 df1 = f$df1, df2 = f$df2, p_operator = f$p_operator, p_value = f$p_value,
                 computed_p = v$computed_p, verdict = v$verdict, line = f$line,
-                reason = v$reason, stringsAsFactors = FALSE)
+                reason = v$reason, statistic_start = f$statistic_span[1],
+                statistic_end = f$statistic_span[2], stringsAsFactors = FALSE)
     })
     out <- do.call(rbind, rows)
     row.names(out) <- NULL
   }
 
+  attr(out, "fragments") <- fragments
   attr(out, "stages") <- list(
     lines = length(py_split_lines(repaired$text)),
     windows_kept = nrow(windows),
+    units_kept = nrow(units),
     by_pattern = n_pattern,
-    by_model = n_model
+    by_model = n_model,
+    fragments = nrow(fragments)
   )
   out
 }
@@ -178,7 +239,7 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
 #' @return The [sc_check_text()] result for the document's text, with
 #'   `source_file` added as the first column, holding `path` in every row.
 #'   Zero rows when the document holds nothing checkable or could not be
-#'   read. The `"stages"` attribute is kept.
+#'   read. The `"stages"` and `"fragments"` attributes are kept.
 #' @examples
 #' \dontrun{
 #' kit <- sc_kit()
@@ -189,10 +250,12 @@ sc_check <- function(path, kit = sc_kit(), model = sc_load_model(kit), timeout =
   text <- sc_read_pdf(path, kit, timeout = timeout)
   out <- sc_check_text(text, kit, model)
   stages <- attr(out, "stages")
+  fragments <- attr(out, "fragments")
 
   source_file <- if (nrow(out) == 0) character(0) else rep(path, nrow(out))
   out <- cbind(data.frame(source_file = source_file, stringsAsFactors = FALSE), out)
 
   attr(out, "stages") <- stages
+  attr(out, "fragments") <- fragments
   out
 }

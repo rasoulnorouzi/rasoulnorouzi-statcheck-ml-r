@@ -62,6 +62,8 @@ extract_matches <- function(text, test_type, pattern) {
   lapply(seq_along(m), function(i) {
     starts <- cap_starts[i, ]
     lengths <- cap_lengths[i, ]
+    j <- match("stat", group_names)
+    stat_pos <- c(starts[j] - 1L, starts[j] - 1L + lengths[j])  # 0-based, half-open
     list(
       test_type = test_type,
       statistic = capture_value(text, "stat", starts, lengths, group_names),
@@ -70,7 +72,9 @@ extract_matches <- function(text, test_type, pattern) {
       p_operator = capture_value(text, "pop", starts, lengths, group_names),
       p_value = capture_value(text, "p", starts, lengths, group_names),
       start = m[i],
-      end = m[i] + match_lengths[i]
+      end = m[i] + match_lengths[i],
+      stat_start = stat_pos[1],
+      stat_end = stat_pos[2]
     )
   })
 }
@@ -89,6 +93,7 @@ drop_contained <- function(found) {
 empty_extraction <- function() {
   data.frame(test_type = character(0), statistic = character(0), df1 = character(0),
              df2 = character(0), p_operator = character(0), p_value = character(0),
+             stat_start = integer(0), stat_end = integer(0),
              stringsAsFactors = FALSE)
 }
 
@@ -109,8 +114,10 @@ empty_extraction <- function() {
 #'   kit; the pattern itself is fixed and ships with the package.
 #' @return A data frame with one row per result found, ordered by where it
 #'   starts in `text`, and the columns `test_type`, `statistic`, `df1`,
-#'   `df2`, `p_operator`, `p_value`, all character. Zero rows when nothing
-#'   matches.
+#'   `df2`, `p_operator`, `p_value`, all character, then `stat_start` and
+#'   `stat_end`, the 0-based half-open interval of the statistic's value in
+#'   `text` (the reference's `Extraction.stat_start`). Zero rows when
+#'   nothing matches.
 #' @examples
 #' kit <- sc_kit()
 #' sc_extract("The main effect was significant, F(2, 87) = 4.11, p = .03.", kit)
@@ -135,6 +142,8 @@ sc_extract <- function(text, kit) {
     df2 = vapply(kept, `[[`, character(1), "df2"),
     p_operator = vapply(kept, `[[`, character(1), "p_operator"),
     p_value = vapply(kept, `[[`, character(1), "p_value"),
+    stat_start = vapply(kept, `[[`, integer(1), "stat_start"),
+    stat_end = vapply(kept, `[[`, integer(1), "stat_end"),
     stringsAsFactors = FALSE
   )
 }

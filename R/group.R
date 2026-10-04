@@ -73,7 +73,8 @@ sc_tags_to_spans <- function(tags) {
 # or at a second STAT tag with no TEST between them, matching the boundary
 # the annotators used. Returns a list of `(parts, spans)` pairs: `parts` is
 # a named list of the raw text captured for each entity, in the order the
-# entities were first seen.
+# entities were first seen. `stat_span` is the first STAT span, 0-based and
+# half-open, or NULL when the group has none.
 sc_group_spans <- function(text, spans) {
   if (length(spans) == 0) return(list())
   starts <- vapply(spans, `[[`, integer(1), "start")
@@ -84,27 +85,32 @@ sc_group_spans <- function(text, spans) {
   results <- list()
   current <- NULL
   current_spans <- list()
+  current_stat <- NULL
+  close_group <- function() {
+    results[[length(results) + 1L]] <<- list(parts = current, spans = current_spans,
+                                            stat_span = current_stat)
+  }
 
   for (sp in spans) {
     label <- sp$entity
     if (identical(label, "TEST") ||
         (identical(label, "STAT") && !is.null(current) && !is.null(current[["STAT"]]))) {
-      if (!is.null(current)) {
-        results[[length(results) + 1L]] <- list(parts = current, spans = current_spans)
-      }
+      if (!is.null(current)) close_group()
       current <- list()
       current_spans <- list()
+      current_stat <- NULL
     }
     if (is.null(current)) {
       current <- list()
       current_spans <- list()
     }
-    if (is.null(current[[label]])) current[[label]] <- substr(text, sp$start + 1L, sp$end)
+    if (is.null(current[[label]])) {
+      current[[label]] <- substr(text, sp$start + 1L, sp$end)
+      if (identical(label, "STAT")) current_stat <- c(sp$start, sp$end)
+    }
     current_spans[[length(current_spans) + 1L]] <- c(sp$start, sp$end)
   }
-  if (!is.null(current)) {
-    results[[length(results) + 1L]] <- list(parts = current, spans = current_spans)
-  }
+  if (!is.null(current)) close_group()
   results
 }
 

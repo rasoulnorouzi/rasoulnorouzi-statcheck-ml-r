@@ -28,7 +28,10 @@ prefilter_spec <- function(kit) {
     # rule off and restores a fixed count of lines.
     target_characters = if (!is.null(spec$target_window_characters))
       spec$target_window_characters else 0,
-    max_context_lines = if (!is.null(spec$max_context_lines)) spec$max_context_lines else 8L
+    max_context_lines = if (!is.null(spec$max_context_lines)) spec$max_context_lines else 8L,
+    # "passage" merges overlapping windows into one unit; anything else, or
+    # no key, keeps one unit per window.
+    unit = if (!is.null(spec$unit)) spec$unit else "window"
   )
 }
 
@@ -130,23 +133,37 @@ prefilter_span <- function(lines, i, spec) {
 #' @param drop_references Blank the reference section before filtering.
 #' @return A data frame with one row per kept window: `start` and `end`
 #'   (character offsets into `text`), `line` (the 0-based index of the line
-#'   that triggered the window), and `text` (the window's own text, built
-#'   from the reference-blanked lines). Zero rows when nothing survives.
+#'   that triggered the window), `text` (the window's own text, built
+#'   from the reference-blanked lines), `start_line` and `end_line` (the
+#'   0-based first and last line of the window), and `char_start` (the
+#'   offset of the window's first character counted over the
+#'   reference-blanked lines, the coordinate [sc_units()] and the pipeline
+#'   use). Zero rows when nothing survives.
 #' @examples
 #' kit <- sc_kit()
 #' sc_prefilter("The effect was significant, t(28) = 2.87, p = .006.", kit)
 #' @export
 sc_prefilter <- function(text, kit, drop_references = TRUE) {
   spec <- prefilter_spec(kit)
+  prefilter_windows(text, spec, drop_references)
+}
+
+# Character offset of the start of each (0-based) line.
+line_offsets <- function(lines) cumsum(c(0L, nchar(lines, type = "chars") + 1L))
+
+prefilter_windows <- function(text, spec, drop_references = TRUE) {
   raw_lines <- py_split_lines(text)
   lines <- if (drop_references) strip_references(raw_lines, spec) else raw_lines
 
-  # Character offset of the start of each (0-based) line, taken from the
-  # ORIGINAL lines: blanking a reference line changes its content, not its
-  # length in the document the offsets describe.
-  offsets <- cumsum(c(0L, nchar(raw_lines, type = "chars") + 1L))
+  # `start` and `end` are offsets in the ORIGINAL lines: blanking a reference
+  # line changes its content, not the document the offsets describe.
+  # `char_start` is counted over the blanked lines, as the Python
+  # `Window.char_start` is, because the pipeline's statistic intervals use it.
+  offsets <- line_offsets(raw_lines)
+  blank_offsets <- line_offsets(lines)
 
   starts <- integer(0); ends <- integer(0); lns <- integer(0); texts <- character(0)
+  los <- integer(0); his <- integer(0); cstarts <- integer(0)
   for (i0 in seq_along(lines) - 1L) {
     line <- lines[i0 + 1L]
     if (!keeps_line(line, spec)) next
@@ -156,8 +173,63 @@ sc_prefilter <- function(text, kit, drop_references = TRUE) {
     ends <- c(ends, offsets[hi] + nchar(raw_lines[hi], type = "chars"))
     lns <- c(lns, i0)
     texts <- c(texts, paste(lines[(lo + 1L):hi], collapse = "\n"))
+    los <- c(los, lo)
+    his <- c(his, hi - 1L)
+    cstarts <- c(cstarts, blank_offsets[lo + 1L])
   }
 
   data.frame(start = starts, end = ends, line = lns, text = texts,
+            start_line = los, end_line = his, char_start = cstarts,
             stringsAsFactors = FALSE)
+}
+
+#' Select the units of text the model reads
+#'
+#' Reads the `unit` key of the prefilter spec. With `"passage"` (spec
+#' version 2) windows that overlap or touch merge into one passage, so the
+#' model reads each character once. With `"window"` every window is a unit.
+#'
+#' @inheritParams sc_prefilter
+#' @return A data frame with one row per unit: `start` and `end` (character
+#'   offsets into `text`), `line` (the 0-based first line of a passage, or
+#'   the triggering line of a window), `text`, `start_line`, `end_line`,
+#'   and `char_start` as in [sc_prefilter()]. Zero rows when nothing
+#'   survives.
+#' @examples
+#' kit <- sc_kit()
+#' sc_units("The effect was significant, t(28) = 2.87, p = .006.", kit)
+#' @export
+sc_units <- function(text, kit, drop_references = TRUE) {
+  spec <- prefilter_spec(kit)
+  windows <- prefilter_windows(text, spec, drop_references)
+  if (!identical(spec$unit, "passage") || nrow(windows) == 0) return(windows)
+
+  raw_lines <- py_split_lines(text)
+  lines <- if (drop_references) strip_references(raw_lines, spec) else raw_lines
+  offsets <- line_offsets(raw_lines)
+  blank_offsets <- line_offsets(lines)
+
+  # Windows come out in line order, but a window grown by the target length
+  # can start before the previous one, so sort as the Python reference does.
+  windows <- windows[order(windows$start_line), ]
+  first <- integer(0); last <- integer(0)
+  for (k in seq_len(nrow(windows))) {
+    if (length(last) > 0 && windows$start_line[k] <= last[length(last)] + 1L) {
+      last[length(last)] <- max(last[length(last)], windows$end_line[k])
+    } else {
+      first <- c(first, windows$start_line[k])
+      last <- c(last, windows$end_line[k])
+    }
+  }
+
+  data.frame(
+    start = offsets[first + 1L],
+    end = offsets[last + 1L] + nchar(raw_lines[last + 1L], type = "chars"),
+    line = first,
+    text = vapply(seq_along(first), function(k) {
+      paste(lines[(first[k] + 1L):(last[k] + 1L)], collapse = "\n")
+    }, character(1)),
+    start_line = first, end_line = last, char_start = blank_offsets[first + 1L],
+    stringsAsFactors = FALSE
+  )
 }

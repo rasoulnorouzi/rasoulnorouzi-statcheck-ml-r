@@ -22,7 +22,7 @@ pass it to every call.}
 The \code{\link[=sc_check_text]{sc_check_text()}} result for the document's text, with
 \code{source_file} added as the first column, holding \code{path} in every row.
 Zero rows when the document holds nothing checkable or could not be
-read. The \code{"stages"} attribute is kept.
+read. The \code{"stages"} and \code{"fragments"} attributes are kept.
 }
 \description{
 Runs \code{\link[=sc_read_pdf]{sc_read_pdf()}} then \code{\link[=sc_check_text]{sc_check_text()}}: the whole pipeline from a

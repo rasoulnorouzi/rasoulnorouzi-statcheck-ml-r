@@ -15,23 +15,43 @@ sc_check_text(text, kit = sc_kit(), model = sc_load_model(kit))
 second, so a caller checking many documents should load it once.}
 }
 \value{
-A data frame with one row per result: \code{source} (\code{"pattern"} or
-\code{"model"}), \code{test_type}, \code{statistic}, \code{df1}, \code{df2}, \code{p_operator},
-\code{p_value}, \code{computed_p}, \code{verdict}, \code{line}, \code{reason}. Zero rows when the
-document holds nothing checkable. The stage counts (lines seen, windows
-kept, results by source) are attached as the \code{"stages"} attribute.
+A data frame with one row per result that has a test name:
+\code{source} (\code{"pattern"} or \code{"model"}), \code{test_type}, \code{statistic}, \code{df1},
+\code{df2}, \code{p_operator}, \code{p_value}, \code{computed_p}, \code{verdict}, \code{line},
+\code{reason}, then \code{statistic_start} and \code{statistic_end} (the interval of
+the statistic in the document, 0-based, half-open; the reference's
+\code{statistic_span}). \code{line} is the first line of the unit that held the
+result. Zero rows when the document holds nothing checkable.
+
+Two attributes are attached. \code{"stages"} holds the counts: \code{lines},
+\code{windows_kept}, \code{units_kept}, \code{by_pattern}, \code{by_model} and
+\code{fragments}. \code{"fragments"} is a data frame of the finds with no test
+name, which are not checked and get no verdict. It has the columns of
+the result except \code{computed_p}, \code{verdict} and \code{reason}, in emission
+order. Deduplication runs over results and fragments together, so
+\code{by_pattern + by_model} equals \code{nrow(out) + nrow(fragments)}.
 }
 \description{
-Runs the whole pipeline: \code{\link[=sc_normalize]{sc_normalize()}}, \code{\link[=sc_repair]{sc_repair()}}, \code{\link[=sc_prefilter]{sc_prefilter()}},
-then for each kept window, the pattern extractor (\code{\link[=sc_extract]{sc_extract()}}) followed
+Runs the whole pipeline: \code{\link[=sc_normalize]{sc_normalize()}}, \code{\link[=sc_repair]{sc_repair()}}, \code{\link[=sc_units]{sc_units()}},
+then for each unit, the pattern extractor (\code{\link[=sc_extract]{sc_extract()}}) followed
 by the trained model (\code{\link[=sc_tag]{sc_tag()}} plus \code{\link[=sc_group]{sc_group()}}'s grouping) for
 whatever the pattern did not already find, and finally \code{\link[=sc_verdict]{sc_verdict()}} on
-every result. A result found by the pattern in one window and again by the
-model in another is kept once, by its rounded statistic, the same rule the
-mother repository's pipeline uses across the whole document.
+every result.
 }
 \details{
-Every window is tagged in one \code{\link[=sc_tag]{sc_tag()}} call, because the model is the
+A unit is a passage under spec version 2: overlapping windows merge, so
+the model reads each character once.
+
+Deduplication. Every find carries the interval \verb{[start, end)} of its
+statistic value, counted in characters over the repaired document with
+reference lines blanked. Units are visited in document order, the pattern
+before the model in each unit. A find whose interval overlaps one already
+emitted is a duplicate and the first stays. Two results with the same
+value at different places are both kept. The mother repository defines
+the rule in \code{Pipeline.run_text}. Its fallback for a find with no interval
+is not ported, because both finders here always give one.
+
+Every unit is tagged in one \code{\link[=sc_tag]{sc_tag()}} call, because the model is the
 slow stage and tagging a batch costs little more than tagging one text.
 }
 \examples{

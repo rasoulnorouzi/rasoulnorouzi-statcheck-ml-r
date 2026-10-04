@@ -1,4 +1,5 @@
 {
+ "dedup_rule": "Every find carries the interval [start, end) of its statistic value, counted in characters over the repaired document with reference lines blanked: the unit's first-character offset plus the position of the value inside the unit (the stat group of the pattern, the STAT span of the model). Visit units in document order, the pattern before the model in each unit. A find is a duplicate when its interval overlaps the interval of a find already emitted, and the first find stays. Two results with the same value at different places are both kept. A find with no interval falls back to its value rounded to three decimals, once per document.",
  "generated_by": "tests/make_parity_cases.py",
  "logit_note": "a port matches to 1e-3 absolute and every argmax tag exactly",
  "logit_tolerance": 0.001,
@@ -20380,7 +20381,70 @@
   ],
   "pipeline": [
    {
+    "expected": [
+     {
+      "computed_p": 0.044863224128917044,
+      "df1": 28.0,
+      "df2": null,
+      "line": 0,
+      "p_operator": "=",
+      "p_value": 0.04,
+      "source": "pattern",
+      "statistic": 2.1,
+      "statistic_span": [
+       155,
+       159
+      ],
+      "test_type": "t",
+      "verdict": "consistent"
+     },
+     {
+      "computed_p": 0.15840734863245434,
+      "df1": 1.0,
+      "df2": 28.0,
+      "line": 0,
+      "p_operator": "=",
+      "p_value": 0.15,
+      "source": "pattern",
+      "statistic": 2.1,
+      "statistic_span": [
+       338,
+       342
+      ],
+      "test_type": "f",
+      "verdict": "inconsistent"
+     }
+    ],
+    "expected_fragments": [],
+    "name": "dedup-same-statistic",
+    "text": "The participants in the second study were recruited from the university pool and received course credit.\nThe groups differed on the first measure, t(28) = 2.10, p = .04,\nThe participants in the second study were recruited from the university pool and received course credit.\nand the interaction was weaker in the second study, F(1, 28) = 2.10, p = .15.\nThe participants in the second study were recruited from the university pool and received course credit."
+   },
+   {
+    "expected": [
+     {
+      "computed_p": 0.044863224128917044,
+      "df1": 28.0,
+      "df2": null,
+      "line": 2,
+      "p_operator": "=",
+      "p_value": 0.04,
+      "source": "pattern",
+      "statistic": 2.1,
+      "statistic_span": [
+       479,
+       483
+      ],
+      "test_type": "t",
+      "verdict": "consistent"
+     }
+    ],
+    "expected_fragments": [],
+    "name": "dedup-window-overlap",
+    "text": "The participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe groups differed reliably on the first measure, t(28) =\n2.10, p = .04, in the expected direction.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit.\nThe participants in the second study were recruited from the university pool and received course credit."
+   },
+   {
     "expected": [],
+    "expected_fragments": [],
     "name": "doc-holdout-1",
     "text": "Exploring Sources of Reading\nComprehension Difficulties Among\nLanguage Minority Learners and Their\nClassmates in Early Adolescence\n\nLimited participation and consumption-saving puzzles: A simple\nexplanation and the role of insurance$\nTodd Gormley a, Hong Liu b,c, Guofu Zhou b,c,\u0002\n\nNo A 4 U: The relationship between multitasking and academic performance\nReynol Junco a,*, Shelia R. Cotten b\na Department of Academic Development and Counseling, Lock Haven University, 104 Russell Hall, Lock Haven, PA 17745, USA\nb Department of Sociology, University of Alabama, Birmingham, Birmingham, AL, USA\n\nYoung children’s computer skills development from kindergarten to third grade\nMesut Saçkes a,*, Kathy Cabe Trundle b, Randy L. Bell c\na Balikesir Provincial Directorate of National Education, Research and Development Unit, 10100 Balikesir, Turkey\n\nDo Not Fear Your Opponent: Suboptimal Changes of a Prevention Strategy\nWhen Facing Stronger Opponents\nDiego Fernandez Slezak and Mariano Sigman\n\nOriginal Article\nDominance and deference: Men inhibit creative displays during mate competition\nwhen their competitor is strong\nDaniel Gambacorta ⁎, Timothy Ketelaar\n\nCigarette smoking and cannabis use are equally\nstrongly associated with psychotic-like experiences:\na cross-sectional study in 1929 young adults\n\nPrefrontal dysfunction during emotion regulation in\ngeneralized anxiety and panic disorders\n\n\nORIGINAL PAPER\nSame process, different outcomes: group performance\nin an acquiring a company experiment\nMarco Casari1 • Jingjing Zhang2 • Christine Jackson3\n\nEXAMINING THE GENERALITY OF THE\nUNEMPLOYMENT–CRIME ASSOCIATION∗\nMIKKO AALTONEN\n\nBRIEF REPORTS\nUnderstanding Factors Associated With Early Therapeutic Alliance in\nPTSD Treatment: Adherence, Childhood Sexual Abuse History,\nand Social Support\n\nr Academy of Management Journal\n\n\n\nDefault mode network abnormalities during state\nswitching in attention deﬁcit hyperactivity disorder\n\n\nBetween Tradition and Modernity: Marriage\nDynamics in Kyrgyzstan\nLesia Nedoluzhko1 & Victor Agadjanian2\nPublished online: 5 May 2015\n\nInvestigating Why and for Whom Management Ethnic Representativeness\nInfluences Interpersonal Mistreatment in the Workplace\nAlex P. Lindsey\n\nAdolescents’ Homework Performance in Mathematics and Science:\nPersonal Factors and Teaching Practices\nRubén Fernández-Alonso\nGovernment of the Principality of Asturias, Oviedo, Asturias,"
    },
@@ -20390,23 +20454,31 @@
       "computed_p": 0.5713361211861817,
       "df1": 48.0,
       "df2": null,
-      "line": 1,
+      "line": 0,
       "p_operator": "=",
       "p_value": 0.57,
       "source": "pattern",
       "statistic": 0.57,
+      "statistic_span": [
+       224,
+       228
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
      {
-      "computed_p": 2.4280173494882318e-05,
+      "computed_p": 2.428017349488232e-05,
       "df1": 187.0,
       "df2": null,
-      "line": 7,
+      "line": 0,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "pattern",
       "statistic": 4.33,
+      "statistic_span": [
+       512,
+       516
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20414,11 +20486,15 @@
       "computed_p": 0.027362084467769433,
       "df1": 1.0,
       "df2": 200.0,
-      "line": 21,
+      "line": 19,
       "p_operator": null,
       "p_value": 0.027,
       "source": "model",
       "statistic": 4.94,
+      "statistic_span": [
+       1032,
+       1036
+      ],
       "test_type": "f",
       "verdict": "undecidable"
      },
@@ -20426,11 +20502,31 @@
       "computed_p": 1.5009504852812884e-09,
       "df1": 172.0,
       "df2": null,
-      "line": 35,
+      "line": 32,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "pattern",
       "statistic": 6.39,
+      "statistic_span": [
+       1528,
+       1532
+      ],
+      "test_type": "t",
+      "verdict": "consistent"
+     },
+     {
+      "computed_p": 6.533171942646738e-08,
+      "df1": 172.0,
+      "df2": null,
+      "line": 32,
+      "p_operator": "<",
+      "p_value": 0.001,
+      "source": "pattern",
+      "statistic": 5.65,
+      "statistic_span": [
+       1835,
+       1839
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20438,23 +20534,15 @@
       "computed_p": 0.00010957190872091657,
       "df1": 172.0,
       "df2": null,
-      "line": 35,
+      "line": 32,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "model",
       "statistic": 3.96,
-      "test_type": "t",
-      "verdict": "consistent"
-     },
-     {
-      "computed_p": 6.533171942646714e-08,
-      "df1": 172.0,
-      "df2": null,
-      "line": 37,
-      "p_operator": "<",
-      "p_value": 0.001,
-      "source": "pattern",
-      "statistic": 5.65,
+      "statistic_span": [
+       1717,
+       1721
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20462,23 +20550,31 @@
       "computed_p": 0.003446461893423705,
       "df1": 58.0,
       "df2": null,
-      "line": 51,
+      "line": 44,
       "p_operator": "=",
       "p_value": 0.003,
       "source": "pattern",
       "statistic": 3.05,
+      "statistic_span": [
+       2512,
+       2516
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
      {
-      "computed_p": 0.0019810985038061207,
+      "computed_p": 0.0019810985038061246,
       "df1": 58.0,
       "df2": null,
-      "line": 53,
+      "line": 44,
       "p_operator": null,
-      "p_value": null,
+      "p_value": 0.962,
       "source": "model",
       "statistic": 3.24,
+      "statistic_span": [
+       2665,
+       2669
+      ],
       "test_type": "t",
       "verdict": "undecidable"
      },
@@ -20486,15 +20582,20 @@
       "computed_p": null,
       "df1": null,
       "df2": 28.0,
-      "line": 59,
+      "line": 44,
       "p_operator": null,
       "p_value": 0.001,
       "source": "model",
       "statistic": 143.74,
+      "statistic_span": [
+       2733,
+       2739
+      ],
       "test_type": "f",
       "verdict": "undecidable"
      }
     ],
+    "expected_fragments": [],
     "name": "doc-holdout-2",
     "text": "regressed onto politicians’ vote-share simultaneously in a single-\nstep.2 Of the measures examined, Warmth (\u0004 \u0002 \u0005.13), t(48) \u0002\n\u00050.62, p \u0002 .54, affect (\u0004 \u0002 \u0005.17), t(48) \u0002 \u00050.88, p \u0002 .38, and\nattractiveness (\u0004 \u0002 .09), t(48) \u0002 0.57, p \u0002 .57 did not significantly\npredict the percentage of votes that the candidates received. The\n\nsignificant difference in author ability: The high authors (N \u0002\n93, M \u0002 17.0, SD \u0002 3.8) produced higher quality first drafts\nthan the low authors (N \u0002 96, M \u0002 14.8, SD \u0002 3.2), t(187) \u0002\n4.33, p \u0003 .001, d \u0002 0.63.\nParticipants received no formal training on how to review their\n\nJournal of Marketing Research\nVol. LI (February 2014), 27–39\n*Kristina M. Durante is Assistant Professor of Marketing, College of\n\nEXAMINING THE GENERALITY OF THE\nUNEMPLOYMENT–CRIME ASSOCIATION∗\nMIKKO AALTONEN\n\nwere more likely to agree that the procedures used by the city to make its budgetary\ndecisions are fair: M 5 3.50 (SD 5 .80) for deliberation condition and M 5 3.24\n(SD 5 .85) for nondeliberation condition (F(1,200) 5 4.94, p 5 .027, d 5 .31). Further-\nmore, participants in the deliberation condition were more likely to indicate that the out-\ncomes of the procedures used by the city of Lincoln to make its budgetary decisions are fair:\n\nRacial Diversity Matters:The Impact of\nDiversity-Related Student Engagement and\nInstitutional Context\n\nBRIEF REPORTS\nUnderstanding Factors Associated With Early Therapeutic Alliance in\nPTSD Treatment: Adherence, Childhood Sexual Abuse History,\nand Social Support\n\n(t(172) = 6.39, p b .001, [95% CI: 9.16–17.36]). Differences also\nemerged on both subscales. Relative to controls, participants in the RA\ngroup scored higher on both the Germ aversion (GA) (t(172) = 3.96,\np b .001, [95% CI: 2.35–7.02]; independent samples t-test) and Perceived\ninfectability (PI) subscales (t(172) = 5.65, p b .001, [95% CI:\n\nOriginal Article\nEvidence of intralocus sexual conflict: physically and hormonally\nmasculine individuals have more attractive brothers relative to sisters\nChristine E. Garver-Apgara,⁎, Melissa A. Eatonb, Joshua M. Tyburc, Melissa Emery Thompsond\n\nThis article was downloaded by: [128.250.144.144] On: 11 January 2020, At: 10:01\nPublisher: Institute for Operations Research and the Management Sciences (INFORMS)\nINFORMS is located in Maryland, USA\nOrganization Science\n\n(i.e., 15 conventional þ 5 “green” houses) estimated the footprint as\nsigniﬁcantly lower than did the participants in the control condi-\ntion (i.e., 15 conventional houses), t(58) ¼ 3.05, p ¼ .003, h2 ¼ 0.14,\nand lower than did the participants in the conventional addition\ncondition (15 conventional þ 5 conventional houses), t(58) ¼ 3.24,\n\n.962, RAdjusted\n2\n\u0002 .961; and the rejection task, F(1, 28) \u0002 143.74,\np \u0005 .001, R2 \u0002 .837, RAdjusted\n2\n\nDo Not Fear Your Opponent: Suboptimal Changes of a Prevention Strategy\nWhen Facing Stronger Opponents\nDiego Fernandez Slezak and Mariano Sigman\n\nTHE CHANGING OF THE BOARDS: THE IMPACT ON FIRM\nVALUATION OF MANDATED FEMALE BOARD\nREPRESENTATION∗\nKENNETH R. AHERN AND AMY K. DITTMAR\n\nA MATCHING THEORY OF ENTREPRENEURS’ TIE\nFORMATION INTENTIONS AND INITIATION OF\nECONOMIC EXCHANGE"
    },
@@ -20504,11 +20605,15 @@
       "computed_p": 1.0716939301789835e-27,
       "df1": 212.0,
       "df2": null,
-      "line": 11,
+      "line": 9,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "pattern",
       "statistic": 12.65,
+      "statistic_span": [
+       532,
+       537
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20516,11 +20621,15 @@
       "computed_p": 2.830034986252957e-05,
       "df1": 212.0,
       "df2": null,
-      "line": 11,
+      "line": 9,
       "p_operator": "=",
       "p_value": 0.04,
       "source": "pattern",
       "statistic": 4.28,
+      "statistic_span": [
+       575,
+       579
+      ],
       "test_type": "t",
       "verdict": "inconsistent"
      },
@@ -20528,11 +20637,15 @@
       "computed_p": 0.0033212023364865366,
       "df1": 212.0,
       "df2": null,
-      "line": 12,
+      "line": 9,
       "p_operator": "=",
       "p_value": 0.086,
       "source": "pattern",
       "statistic": 2.97,
+      "statistic_span": [
+       689,
+       693
+      ],
       "test_type": "t",
       "verdict": "decision_error"
      },
@@ -20540,11 +20653,15 @@
       "computed_p": 8.598550093312372e-28,
       "df1": 139.0,
       "df2": null,
-      "line": 16,
+      "line": 9,
       "p_operator": "<",
       "p_value": 0.01,
       "source": "pattern",
       "statistic": 0.76,
+      "statistic_span": [
+       885,
+       888
+      ],
       "test_type": "r",
       "verdict": "consistent"
      },
@@ -20552,11 +20669,15 @@
       "computed_p": null,
       "df1": null,
       "df2": null,
-      "line": 29,
+      "line": 27,
       "p_operator": null,
       "p_value": null,
       "source": "model",
       "statistic": 0.74,
+      "statistic_span": [
+       1241,
+       1244
+      ],
       "test_type": "r",
       "verdict": "undecidable"
      },
@@ -20564,11 +20685,15 @@
       "computed_p": null,
       "df1": null,
       "df2": null,
-      "line": 29,
+      "line": 27,
       "p_operator": null,
       "p_value": null,
       "source": "model",
       "statistic": 0.68,
+      "statistic_span": [
+       1253,
+       1256
+      ],
       "test_type": "r",
       "verdict": "undecidable"
      },
@@ -20576,11 +20701,15 @@
       "computed_p": 2.7193905987234648e-17,
       "df1": 52.0,
       "df2": null,
-      "line": 38,
+      "line": 36,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "pattern",
       "statistic": 12.5,
+      "statistic_span": [
+       1723,
+       1727
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20588,11 +20717,15 @@
       "computed_p": 0.0076633478508143366,
       "df1": 3.0,
       "df2": 286.0,
-      "line": 45,
+      "line": 43,
       "p_operator": "<",
       "p_value": null,
       "source": "model",
       "statistic": 4.05,
+      "statistic_span": [
+       2227,
+       2231
+      ],
       "test_type": "f",
       "verdict": "undecidable"
      },
@@ -20600,11 +20733,15 @@
       "computed_p": null,
       "df1": null,
       "df2": null,
-      "line": 57,
+      "line": 55,
       "p_operator": null,
       "p_value": null,
       "source": "model",
       "statistic": 0.62,
+      "statistic_span": [
+       2759,
+       2762
+      ],
       "test_type": "r",
       "verdict": "undecidable"
      },
@@ -20612,27 +20749,36 @@
       "computed_p": null,
       "df1": null,
       "df2": null,
-      "line": 65,
+      "line": 55,
       "p_operator": null,
       "p_value": null,
       "source": "model",
       "statistic": 0.02,
+      "statistic_span": [
+       3042,
+       3046
+      ],
       "test_type": "f",
       "verdict": "undecidable"
      },
      {
-      "computed_p": 0.004306676934755295,
+      "computed_p": 0.004306676934755298,
       "df1": 2.0,
       "df2": 212.0,
-      "line": 74,
+      "line": 69,
       "p_operator": "<",
       "p_value": 0.05,
       "source": "pattern",
       "statistic": 5.59,
+      "statistic_span": [
+       3501,
+       3505
+      ],
       "test_type": "f",
       "verdict": "consistent"
      }
     ],
+    "expected_fragments": [],
     "name": "doc-holdout-3",
     "text": "THE JOURNAL OF FINANCE • VOL. LXX, NO. 6 • DECEMBER 2015\nRegulatory Arbitrage and Cross-Border Bank\nAcquisitions\nG. ANDREW KAROLYI and ALVARO G. TABOADA∗\n\nOriginal Article\nEvidence of intralocus sexual conflict: physically and hormonally\nmasculine individuals have more attractive brothers relative to sisters\nChristine E. Garver-Apgara,⁎, Melissa A. Eatonb, Joshua M. Tyburc, Melissa Emery Thompsond\n\ndehumanization ratings was significantly greater than the correla-\ntion between neural responses and ratings of dislike, t(212) \u0004\n12.65, p \u0006 .001, and homogeneity, t(212) \u0004 4.28, p \u0004 .040, and\nmarginally stronger than the correlation between neural responses\nand dissimilarity, t(212) \u0004 2.97, p \u0004 .086.\n\n“How bothered you would be if your partner earned 0 lottery\ntickets”; 1 \u0002 not at all and 7 \u0002 extremely. We combined these\nitems to create a measure of anticipated guilt, r(139) \u0002 .76, p \u0006\n.01.\nAt the end of the study, we collected demographic information\n\nOriginal Article\nDominance and deference: Men inhibit creative displays during mate competition\nwhen their competitor is strong\nDaniel Gambacorta ⁎, Timothy Ketelaar\n\n\ndisplayed in Table 3, FSSB scores correlated positively and significantly with these two mea-\nsures (i.e., r = .74 and r = .68, respectively). The magnitudes of these correlations suggest a\nstrong conceptual overlap in these construct subdimensions and, therefore, provide evidence\nof convergent validity.\n\nAnatoli Colicev, Ashwin Malshe, Koen Pauwels, & Peter O’Connor\nImproving Consumer Mindset Metrics\nand Shareholder Value Through\n\ndence estimates per artwork pair are displayed in Table 2. The\noverall mean for T1 conﬁdence was 65.5% (SD = 9.0), which was\nsigniﬁcantly above 50%, t(52) = 12.5, p < .001. The overall mean\nFig. 1. This is a screenshot of the information buffet for the photography artwork. It contains titles of comments ostensibly written by local students. The titles appear in a\nrandom order for each participant. See Appendix for the full comments associated with these titles.\n\nCourse grades at the end of the semester signiﬁcantly differed\nby seating pattern groups, with back sitters earning lower course\ngrades than did students in the other three groups, F (3,\n286) ¼ 4.05, p < . 01. As course grade was measured on the tradi-\ntional grading scale (i.e., A ¼ 4, B ¼ 3, C ¼ 2, D ¼ 1, and F ¼ 0),\n\nThe Costs of Being Private: Evidence from\nthe Loan Market\nAnthony Saunders\n\nPrefrontal dysfunction during emotion regulation in\ngeneralized anxiety and panic disorders\n\n\nattitudes in Studies 1 and 2. The dashed lines are lowess smoothers. Points are perturbed\nslightly to show their density more clearly. The figure reveals substantial dissociation between\nimplicit and explicit attitudes (Pearson’s r = .62 in Study 1, .59 in Study 2).\nNeither kind of attitude is significant for ambivalent\nsubjects in Study 2, though the small sample size\n\nFig. 5 Cumulative empirical distributions of Propdonors (a) and Propdonamount (b) by treatment condi-\ntion\np-value = 0.8888; Propdonamount: F = 0.02, p-value = 0.9833).15 In summary,\nwe conclude that the picture of eyes did not have a general effect on recyclers’ be-\nhavior.\n\nORIGINAL PAPER\nSame process, different outcomes: group performance\nin an acquiring a company experiment\nMarco Casari1 • Jingjing Zhang2 • Christine Jackson3\n\nabstract construal (Vallacher and Wegner 1989). The 3\n(CRA) # 2 (country of origin) # 2 (product description\nstrength) ANOVA revealed a main effect of CRA (F(2, 212)\np 5.59, p ! .05). Planned contrasts revealed that the BIF\nscore for positive CRA was higher than that for negative"
    },
@@ -20642,11 +20788,15 @@
       "computed_p": 0.022315728160948567,
       "df1": 23.0,
       "df2": null,
-      "line": 14,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.022,
       "source": "pattern",
       "statistic": 2.45,
+      "statistic_span": [
+       627,
+       631
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
@@ -20654,11 +20804,15 @@
       "computed_p": 0.012400181003238748,
       "df1": 2.0,
       "df2": 30.0,
-      "line": 14,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.012,
       "source": "pattern",
       "statistic": 5.1,
+      "statistic_span": [
+       702,
+       706
+      ],
       "test_type": "f",
       "verdict": "consistent"
      },
@@ -20666,47 +20820,47 @@
       "computed_p": 0.0031996062478553107,
       "df1": 1.0,
       "df2": null,
-      "line": 14,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.003,
       "source": "pattern",
       "statistic": 8.69,
+      "statistic_span": [
+       831,
+       835
+      ],
       "test_type": "chi2",
       "verdict": "consistent"
-     },
-     {
-      "computed_p": null,
-      "df1": null,
-      "df2": null,
-      "line": 17,
-      "p_operator": "=",
-      "p_value": 0.02,
-      "source": "model",
-      "statistic": 0.42,
-      "test_type": "r",
-      "verdict": "undecidable"
      },
      {
       "computed_p": 0.07842066481562293,
       "df1": 46.0,
       "df2": null,
-      "line": 18,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.04,
       "source": "pattern",
       "statistic": 1.8,
+      "statistic_span": [
+       1017,
+       1021
+      ],
       "test_type": "t",
       "verdict": "decision_error"
      },
      {
-      "computed_p": 0.0029766142178497285,
+      "computed_p": 0.002976614217849728,
       "df1": 1.0,
       "df2": 118.0,
-      "line": 20,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.003,
       "source": "pattern",
       "statistic": 9.2,
+      "statistic_span": [
+       1092,
+       1096
+      ],
       "test_type": "f",
       "verdict": "consistent"
      },
@@ -20714,11 +20868,15 @@
       "computed_p": 0.04999579029644087,
       "df1": null,
       "df2": null,
-      "line": 20,
+      "line": 11,
       "p_operator": "=",
       "p_value": 0.05,
       "source": "pattern",
       "statistic": 1.96,
+      "statistic_span": [
+       1146,
+       1150
+      ],
       "test_type": "z",
       "verdict": "consistent"
      },
@@ -20726,29 +20884,60 @@
       "computed_p": 0.0005439714186639247,
       "df1": 19.0,
       "df2": null,
-      "line": 21,
+      "line": 11,
       "p_operator": "<",
       "p_value": 0.001,
       "source": "pattern",
       "statistic": 4.15,
+      "statistic_span": [
+       1233,
+       1237
+      ],
       "test_type": "t",
       "verdict": "consistent"
      },
      {
-      "computed_p": 0.04960370251290495,
+      "computed_p": 0.04960370251290499,
       "df1": 3.0,
       "df2": 92.0,
-      "line": 22,
-      "p_operator": null,
-      "p_value": null,
-      "source": "model",
+      "line": 11,
+      "p_operator": "=",
+      "p_value": 0.049,
+      "source": "pattern",
       "statistic": 2.71,
+      "statistic_span": [
+       1307,
+       1311
+      ],
       "test_type": "f",
+      "verdict": "consistent"
+     },
+     {
+      "computed_p": null,
+      "df1": null,
+      "df2": null,
+      "line": 11,
+      "p_operator": "=",
+      "p_value": 0.02,
+      "source": "model",
+      "statistic": 0.42,
+      "statistic_span": [
+       882,
+       885
+      ],
+      "test_type": "r",
       "verdict": "undecidable"
      }
     ],
+    "expected_fragments": [],
     "name": "doc-sample-paper",
     "text": "Attention and recall under time pressure\nA. Example, B. Sample, and C. Fictional\nDepartment of Nothing in Particular\nAbstract\nWe tested whether time pressure changes recall. Ninety-six people took\npart. Recall fell under pressure, and the effect held across two\nmeasures. We report every test in full, so that the analysis can be\nchecked by a reader.\nMethod\nNinety-six adults took part, and each of them completed both\nconditions. We measured recall as the number of items reported, and\nwe measured confidence on a seven-point scale. The study was not\npreregistered.\nResults\nReaction times differed between the groups, t(23) = 2.45, p = .022.\nThe effect of condition on recall was reliable, F(2, 30) = 5.10, p = .012.\nThe effect did not depend on the order of the blocks.\nAccuracy differed between the conditions, χ2(1, N = 223) = 8.69, p = .003.\nConfidence rose with accuracy, r = .42, p = .02, although the two\nmeasures were collected on different days.\nRecall under pressure was lower than recall at rest, t(46) = 1.80, p = .04.\nThe same pattern appeared in the second sample, F(1, 118) = 9.20, p = .003.\nThe manipulation check succeeded, z = 1.96, p = .05. Participants who\nnoticed the manipulation reported more effort, t(19) = 4.15, p < .001.\nSelf-reported tiredness rose over the session, F(3, 92) = 2.71,\np = .049, although the measure was collected only twice.\nTable 1. Recall by condition\nCondition          N     M      SD     t       p\nRest              48   14.2    3.1    2.45   .022\nPressure          48   11.8    3.6    1.80   .040\nDiscussion\nTime pressure lowered recall in both samples. The effect is small and\nthe design is not conclusive. We report it so that others can test it\nin a larger sample.\nReferences\nExample, A., & Sample, B. (2019). Attention under load. Journal of\n    Invented Findings, 12(3), 145-162.\nFictional, C. (2021). Recall and time. Review of Nothing, 8(1), 3-19.\nSample, B., Example, A., & Fictional, C. (2020). Measuring effort.\n    Bulletin of Made-Up Work, 44(2), 201-218.\n"
+   },
+   {
+    "expected": [],
+    "expected_fragments": [],
+    "name": "fragment-bare-statistic",
+    "text": "The participants in the second study were recruited from the university pool and received course credit.\nThe difference was 2.31, p = .02.\nThe participants in the second study were recruited from the university pool and received course credit."
    }
   ],
   "prefilter": [
@@ -21212,7 +21401,7 @@
     "df1": 2,
     "df2": 30,
     "expected": {
-     "computed_p": 0.02645200401859202,
+     "computed_p": 0.026452004018592035,
      "verdict": "consistent"
     },
     "name": "f-basic-small",
@@ -21310,7 +21499,7 @@
     "df1": 2,
     "df2": 40,
     "expected": {
-     "computed_p": 0.4563869462012925,
+     "computed_p": 0.45638694620129244,
      "verdict": "consistent"
     },
     "name": "f-operator-gt",
@@ -21324,7 +21513,7 @@
     "df1": 2,
     "df2": 40,
     "expected": {
-     "computed_p": 0.000592433973290105,
+     "computed_p": 0.0005924339732901045,
      "verdict": "consistent"
     },
     "name": "f-operator-lt",
@@ -21352,7 +21541,7 @@
     "df1": 178,
     "df2": null,
     "expected": {
-     "computed_p": 1.3657613228250685e-06,
+     "computed_p": 1.3657613228250681e-06,
      "verdict": "decision_error"
     },
     "name": "ns-contradicted",
@@ -21366,7 +21555,7 @@
     "df1": 178,
     "df2": null,
     "expected": {
-     "computed_p": 0.5898719768421473,
+     "computed_p": 0.5898719768421474,
      "verdict": "consistent"
     },
     "name": "ns-not-significant",
@@ -21674,7 +21863,7 @@
     "df1": 67,
     "df2": null,
     "expected": {
-     "computed_p": 0.14356030539888653,
+     "computed_p": 0.1435603053988866,
      "verdict": "consistent"
     },
     "name": "rounding-stat-2dp",
@@ -21688,7 +21877,7 @@
     "df1": 67,
     "df2": null,
     "expected": {
-     "computed_p": 0.14356030539888653,
+     "computed_p": 0.1435603053988866,
      "verdict": "inconsistent"
     },
     "name": "rounding-stat-4dp",
@@ -21716,7 +21905,7 @@
     "df1": 60,
     "df2": null,
     "expected": {
-     "computed_p": 0.07688842786371634,
+     "computed_p": 0.07688842786371636,
      "verdict": "consistent"
     },
     "name": "t-basic-large-df",
@@ -21758,7 +21947,7 @@
     "df1": 20,
     "df2": null,
     "expected": {
-     "computed_p": 0.1492357711692524,
+     "computed_p": 0.14923577116925246,
      "verdict": "decision_error"
     },
     "name": "t-decision-error",
@@ -21856,7 +22045,7 @@
     "df1": 20,
     "df2": null,
     "expected": {
-     "computed_p": 0.1492357711692524,
+     "computed_p": 0.14923577116925246,
      "verdict": "consistent"
     },
     "name": "t-p-four-decimal",
@@ -21870,7 +22059,7 @@
     "df1": 20,
     "df2": null,
     "expected": {
-     "computed_p": 0.1492357711692524,
+     "computed_p": 0.14923577116925246,
      "verdict": "consistent"
     },
     "name": "t-p-one-decimal",
@@ -21926,7 +22115,7 @@
     "df1": 20,
     "df2": null,
     "expected": {
-     "computed_p": 0.1492357711692524,
+     "computed_p": 0.14923577116925246,
      "verdict": "consistent"
     },
     "name": "t-p-three-decimal",
@@ -21940,7 +22129,7 @@
     "df1": 20,
     "df2": null,
     "expected": {
-     "computed_p": 0.1492357711692524,
+     "computed_p": 0.14923577116925246,
      "verdict": "consistent"
     },
     "name": "t-p-two-decimal",
@@ -22356,7 +22545,138 @@
     "name": "holdout-hoedfe92b9",
     "text": "brought about by omission led to lower average arousal (M =\n−0.14, SE = 0.02) than when the utilitarian outcome required ac-\ntion (M = 0.08, SE = 0.01). There was also a main effect of the di-\nlemma type (F(1, 215) = 6.67, p = 0.010, ηp\n2 = 0.03) such that"
    }
+  ],
+  "units": [
+   {
+    "expected": [
+     {
+      "char_end": 594,
+      "char_start": 282,
+      "end_line": 13,
+      "sha256": "41f29b533e65168db9a3fa97356d96bf79d1d9e327ca65179345ca8e60e0ebaf",
+      "start_line": 9
+     },
+     {
+      "char_end": 1646,
+      "char_start": 1116,
+      "end_line": 44,
+      "sha256": "0d4622ab0651ac05922d978ada9b40262bc054f34499f98f5af91b5cd5c5b33e",
+      "start_line": 25
+     },
+     {
+      "char_end": 2188,
+      "char_start": 1932,
+      "end_line": 63,
+      "sha256": "dfc8428a3fa2005058922656d4bad01d7dbc682241d65f77b513d31c22d8ae33",
+      "start_line": 57
+     }
+    ],
+    "name": "doc-holdout-1",
+    "text": "Exploring Sources of Reading\nComprehension Difficulties Among\nLanguage Minority Learners and Their\nClassmates in Early Adolescence\n\nLimited participation and consumption-saving puzzles: A simple\nexplanation and the role of insurance$\nTodd Gormley a, Hong Liu b,c, Guofu Zhou b,c,\u0002\n\nNo A 4 U: The relationship between multitasking and academic performance\nReynol Junco a,*, Shelia R. Cotten b\na Department of Academic Development and Counseling, Lock Haven University, 104 Russell Hall, Lock Haven, PA 17745, USA\nb Department of Sociology, University of Alabama, Birmingham, Birmingham, AL, USA\n\nYoung children’s computer skills development from kindergarten to third grade\nMesut Saçkes a,*, Kathy Cabe Trundle b, Randy L. Bell c\na Balikesir Provincial Directorate of National Education, Research and Development Unit, 10100 Balikesir, Turkey\n\nDo Not Fear Your Opponent: Suboptimal Changes of a Prevention Strategy\nWhen Facing Stronger Opponents\nDiego Fernandez Slezak and Mariano Sigman\n\nOriginal Article\nDominance and deference: Men inhibit creative displays during mate competition\nwhen their competitor is strong\nDaniel Gambacorta ⁎, Timothy Ketelaar\n\nCigarette smoking and cannabis use are equally\nstrongly associated with psychotic-like experiences:\na cross-sectional study in 1929 young adults\n\nPrefrontal dysfunction during emotion regulation in\ngeneralized anxiety and panic disorders\n\n\nORIGINAL PAPER\nSame process, different outcomes: group performance\nin an acquiring a company experiment\nMarco Casari1 • Jingjing Zhang2 • Christine Jackson3\n\nEXAMINING THE GENERALITY OF THE\nUNEMPLOYMENT–CRIME ASSOCIATION∗\nMIKKO AALTONEN\n\nBRIEF REPORTS\nUnderstanding Factors Associated With Early Therapeutic Alliance in\nPTSD Treatment: Adherence, Childhood Sexual Abuse History,\nand Social Support\n\nr Academy of Management Journal\n\n\n\nDefault mode network abnormalities during state\nswitching in attention deﬁcit hyperactivity disorder\n\n\nBetween Tradition and Modernity: Marriage\nDynamics in Kyrgyzstan\nLesia Nedoluzhko1 & Victor Agadjanian2\nPublished online: 5 May 2015\n\nInvestigating Why and for Whom Management Ethnic Representativeness\nInfluences Interpersonal Mistreatment in the Workplace\nAlex P. Lindsey\n\nAdolescents’ Homework Performance in Mathematics and Science:\nPersonal Factors and Teaching Practices\nRubén Fernández-Alonso\nGovernment of the Principality of Asturias, Oviedo, Asturias,"
+   },
+   {
+    "expected": [
+     {
+      "char_end": 797,
+      "char_start": 0,
+      "end_line": 17,
+      "sha256": "f9f136a416001335a39f16efd13260cd1bee07e493bfe5731ade75d0785bd12a",
+      "start_line": 0
+     },
+     {
+      "char_end": 1252,
+      "char_start": 813,
+      "end_line": 24,
+      "sha256": "d13fbb3f16bb568402a08a36d845ab3f1769d45dda12052eb3018140dc917d9d",
+      "start_line": 19
+     },
+     {
+      "char_end": 1943,
+      "char_start": 1439,
+      "end_line": 42,
+      "sha256": "ed7e7cb318ccd32fcd8564d20af6084e6bf9a8ae89c644467166bbaa7fbaf1a5",
+      "start_line": 32
+     },
+     {
+      "char_end": 2918,
+      "char_start": 2016,
+      "end_line": 65,
+      "sha256": "333b64707c6f7521a6af1474e46159f0275bb57b96a0705a20c2d34c4d010aca",
+      "start_line": 44
+     }
+    ],
+    "name": "doc-holdout-2",
+    "text": "regressed onto politicians’ vote-share simultaneously in a single-\nstep.2 Of the measures examined, Warmth (\u0004 \u0002 \u0005.13), t(48) \u0002\n\u00050.62, p \u0002 .54, affect (\u0004 \u0002 \u0005.17), t(48) \u0002 \u00050.88, p \u0002 .38, and\nattractiveness (\u0004 \u0002 .09), t(48) \u0002 0.57, p \u0002 .57 did not significantly\npredict the percentage of votes that the candidates received. The\n\nsignificant difference in author ability: The high authors (N \u0002\n93, M \u0002 17.0, SD \u0002 3.8) produced higher quality first drafts\nthan the low authors (N \u0002 96, M \u0002 14.8, SD \u0002 3.2), t(187) \u0002\n4.33, p \u0003 .001, d \u0002 0.63.\nParticipants received no formal training on how to review their\n\nJournal of Marketing Research\nVol. LI (February 2014), 27–39\n*Kristina M. Durante is Assistant Professor of Marketing, College of\n\nEXAMINING THE GENERALITY OF THE\nUNEMPLOYMENT–CRIME ASSOCIATION∗\nMIKKO AALTONEN\n\nwere more likely to agree that the procedures used by the city to make its budgetary\ndecisions are fair: M 5 3.50 (SD 5 .80) for deliberation condition and M 5 3.24\n(SD 5 .85) for nondeliberation condition (F(1,200) 5 4.94, p 5 .027, d 5 .31). Further-\nmore, participants in the deliberation condition were more likely to indicate that the out-\ncomes of the procedures used by the city of Lincoln to make its budgetary decisions are fair:\n\nRacial Diversity Matters:The Impact of\nDiversity-Related Student Engagement and\nInstitutional Context\n\nBRIEF REPORTS\nUnderstanding Factors Associated With Early Therapeutic Alliance in\nPTSD Treatment: Adherence, Childhood Sexual Abuse History,\nand Social Support\n\n(t(172) = 6.39, p b .001, [95% CI: 9.16–17.36]). Differences also\nemerged on both subscales. Relative to controls, participants in the RA\ngroup scored higher on both the Germ aversion (GA) (t(172) = 3.96,\np b .001, [95% CI: 2.35–7.02]; independent samples t-test) and Perceived\ninfectability (PI) subscales (t(172) = 5.65, p b .001, [95% CI:\n\nOriginal Article\nEvidence of intralocus sexual conflict: physically and hormonally\nmasculine individuals have more attractive brothers relative to sisters\nChristine E. Garver-Apgara,⁎, Melissa A. Eatonb, Joshua M. Tyburc, Melissa Emery Thompsond\n\nThis article was downloaded by: [128.250.144.144] On: 11 January 2020, At: 10:01\nPublisher: Institute for Operations Research and the Management Sciences (INFORMS)\nINFORMS is located in Maryland, USA\nOrganization Science\n\n(i.e., 15 conventional þ 5 “green” houses) estimated the footprint as\nsigniﬁcantly lower than did the participants in the control condi-\ntion (i.e., 15 conventional houses), t(58) ¼ 3.05, p ¼ .003, h2 ¼ 0.14,\nand lower than did the participants in the conventional addition\ncondition (15 conventional þ 5 conventional houses), t(58) ¼ 3.24,\n\n.962, RAdjusted\n2\n\u0002 .961; and the rejection task, F(1, 28) \u0002 143.74,\np \u0005 .001, R2 \u0002 .837, RAdjusted\n2\n\nDo Not Fear Your Opponent: Suboptimal Changes of a Prevention Strategy\nWhen Facing Stronger Opponents\nDiego Fernandez Slezak and Mariano Sigman\n\nTHE CHANGING OF THE BOARDS: THE IMPACT ON FIRM\nVALUATION OF MANDATED FEMALE BOARD\nREPRESENTATION∗\nKENNETH R. AHERN AND AMY K. DITTMAR\n\nA MATCHING THEORY OF ENTREPRENEURS’ TIE\nFORMATION INTENTIONS AND INITIATION OF\nECONOMIC EXCHANGE"
+   },
+   {
+    "expected": [
+     {
+      "char_end": 309,
+      "char_start": 0,
+      "end_line": 7,
+      "sha256": "b861d922ad752dddada01bcba1bac40a7246227074fd6648d8057f0e86ab6488",
+      "start_line": 0
+     },
+     {
+      "char_end": 960,
+      "char_start": 401,
+      "end_line": 20,
+      "sha256": "37684e5838bdacd0e06fc9ff58594172ce4cef851aac4a5351c0ea82670a564f",
+      "start_line": 9
+     },
+     {
+      "char_end": 1435,
+      "char_start": 1129,
+      "end_line": 31,
+      "sha256": "753f5d9884e8b5f2427c13ba623dbe8f003d1b43a3a443d868a23f3ac8b420e4",
+      "start_line": 27
+     },
+     {
+      "char_end": 2031,
+      "char_start": 1565,
+      "end_line": 41,
+      "sha256": "bd5d3b7e3292d671f141ad2a5e5ebb550d1e3a9940666f31ae8b7cf9df521b7d",
+      "start_line": 36
+     },
+     {
+      "char_end": 2412,
+      "char_start": 2033,
+      "end_line": 50,
+      "sha256": "d0d7ec207c82213f78e1cb9f56ad1771598c551ffc31f174d15f50dcd5b1489b",
+      "start_line": 43
+     },
+     {
+      "char_end": 3173,
+      "char_start": 2523,
+      "end_line": 67,
+      "sha256": "01b70ba31579b0dd659701793af2c8d08189445dda84ce79528b92e8827bf5f6",
+      "start_line": 55
+     },
+     {
+      "char_end": 3613,
+      "char_start": 3175,
+      "end_line": 78,
+      "sha256": "5053b532bb1b5edf56125f6ef0b11cee24508d46685050f33c258e3154b741dc",
+      "start_line": 69
+     }
+    ],
+    "name": "doc-holdout-3",
+    "text": "THE JOURNAL OF FINANCE • VOL. LXX, NO. 6 • DECEMBER 2015\nRegulatory Arbitrage and Cross-Border Bank\nAcquisitions\nG. ANDREW KAROLYI and ALVARO G. TABOADA∗\n\nOriginal Article\nEvidence of intralocus sexual conflict: physically and hormonally\nmasculine individuals have more attractive brothers relative to sisters\nChristine E. Garver-Apgara,⁎, Melissa A. Eatonb, Joshua M. Tyburc, Melissa Emery Thompsond\n\ndehumanization ratings was significantly greater than the correla-\ntion between neural responses and ratings of dislike, t(212) \u0004\n12.65, p \u0006 .001, and homogeneity, t(212) \u0004 4.28, p \u0004 .040, and\nmarginally stronger than the correlation between neural responses\nand dissimilarity, t(212) \u0004 2.97, p \u0004 .086.\n\n“How bothered you would be if your partner earned 0 lottery\ntickets”; 1 \u0002 not at all and 7 \u0002 extremely. We combined these\nitems to create a measure of anticipated guilt, r(139) \u0002 .76, p \u0006\n.01.\nAt the end of the study, we collected demographic information\n\nOriginal Article\nDominance and deference: Men inhibit creative displays during mate competition\nwhen their competitor is strong\nDaniel Gambacorta ⁎, Timothy Ketelaar\n\n\ndisplayed in Table 3, FSSB scores correlated positively and significantly with these two mea-\nsures (i.e., r = .74 and r = .68, respectively). The magnitudes of these correlations suggest a\nstrong conceptual overlap in these construct subdimensions and, therefore, provide evidence\nof convergent validity.\n\nAnatoli Colicev, Ashwin Malshe, Koen Pauwels, & Peter O’Connor\nImproving Consumer Mindset Metrics\nand Shareholder Value Through\n\ndence estimates per artwork pair are displayed in Table 2. The\noverall mean for T1 conﬁdence was 65.5% (SD = 9.0), which was\nsigniﬁcantly above 50%, t(52) = 12.5, p < .001. The overall mean\nFig. 1. This is a screenshot of the information buffet for the photography artwork. It contains titles of comments ostensibly written by local students. The titles appear in a\nrandom order for each participant. See Appendix for the full comments associated with these titles.\n\nCourse grades at the end of the semester signiﬁcantly differed\nby seating pattern groups, with back sitters earning lower course\ngrades than did students in the other three groups, F (3,\n286) ¼ 4.05, p < . 01. As course grade was measured on the tradi-\ntional grading scale (i.e., A ¼ 4, B ¼ 3, C ¼ 2, D ¼ 1, and F ¼ 0),\n\nThe Costs of Being Private: Evidence from\nthe Loan Market\nAnthony Saunders\n\nPrefrontal dysfunction during emotion regulation in\ngeneralized anxiety and panic disorders\n\n\nattitudes in Studies 1 and 2. The dashed lines are lowess smoothers. Points are perturbed\nslightly to show their density more clearly. The figure reveals substantial dissociation between\nimplicit and explicit attitudes (Pearson’s r = .62 in Study 1, .59 in Study 2).\nNeither kind of attitude is significant for ambivalent\nsubjects in Study 2, though the small sample size\n\nFig. 5 Cumulative empirical distributions of Propdonors (a) and Propdonamount (b) by treatment condi-\ntion\np-value = 0.8888; Propdonamount: F = 0.02, p-value = 0.9833).15 In summary,\nwe conclude that the picture of eyes did not have a general effect on recyclers’ be-\nhavior.\n\nORIGINAL PAPER\nSame process, different outcomes: group performance\nin an acquiring a company experiment\nMarco Casari1 • Jingjing Zhang2 • Christine Jackson3\n\nabstract construal (Vallacher and Wegner 1989). The 3\n(CRA) # 2 (country of origin) # 2 (product description\nstrength) ANOVA revealed a main effect of CRA (F(2, 212)\np 5.59, p ! .05). Planned contrasts revealed that the BIF\nscore for positive CRA was higher than that for negative"
+   },
+   {
+    "expected": [
+     {
+      "char_end": 1698,
+      "char_start": 487,
+      "end_line": 32,
+      "sha256": "e9cb3d393511bda8e9ca1ff59d6864724b44e77bb3dc0d74442943effa29e4ee",
+      "start_line": 11
+     }
+    ],
+    "name": "doc-sample-paper",
+    "text": "Attention and recall under time pressure\nA. Example, B. Sample, and C. Fictional\nDepartment of Nothing in Particular\nAbstract\nWe tested whether time pressure changes recall. Ninety-six people took\npart. Recall fell under pressure, and the effect held across two\nmeasures. We report every test in full, so that the analysis can be\nchecked by a reader.\nMethod\nNinety-six adults took part, and each of them completed both\nconditions. We measured recall as the number of items reported, and\nwe measured confidence on a seven-point scale. The study was not\npreregistered.\nResults\nReaction times differed between the groups, t(23) = 2.45, p = .022.\nThe effect of condition on recall was reliable, F(2, 30) = 5.10, p = .012.\nThe effect did not depend on the order of the blocks.\nAccuracy differed between the conditions, χ2(1, N = 223) = 8.69, p = .003.\nConfidence rose with accuracy, r = .42, p = .02, although the two\nmeasures were collected on different days.\nRecall under pressure was lower than recall at rest, t(46) = 1.80, p = .04.\nThe same pattern appeared in the second sample, F(1, 118) = 9.20, p = .003.\nThe manipulation check succeeded, z = 1.96, p = .05. Participants who\nnoticed the manipulation reported more effort, t(19) = 4.15, p < .001.\nSelf-reported tiredness rose over the session, F(3, 92) = 2.71,\np = .049, although the measure was collected only twice.\nTable 1. Recall by condition\nCondition          N     M      SD     t       p\nRest              48   14.2    3.1    2.45   .022\nPressure          48   11.8    3.6    1.80   .040\nDiscussion\nTime pressure lowered recall in both samples. The effect is small and\nthe design is not conclusive. We report it so that others can test it\nin a larger sample.\nReferences\nExample, A., & Sample, B. (2019). Attention under load. Journal of\n    Invented Findings, 12(3), 145-162.\nFictional, C. (2021). Recall and time. Review of Nothing, 8(1), 3-19.\nSample, B., Example, A., & Fictional, C. (2020). Measuring effort.\n    Bulletin of Made-Up Work, 44(2), 201-218.\n"
+   }
   ]
  },
- "version": 2
+ "version": 3
 }

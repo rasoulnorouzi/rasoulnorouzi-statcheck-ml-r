@@ -1,6 +1,8 @@
 {
   "_comment": "Shared prefilter rules. Python, JavaScript and R read this file. Never restate these rules in a port.",
-  "version": 1,
+  "version": 2,
+  "unit": "passage",
+  "_why_unit": "Measured on gold without training on 2026-10-04: the same windows merged into passages gave recall 0.862 against 0.863, text read 15.8 M characters against 28.1 M, and finds in no-result papers 287 against 304. A merged passage reads each character once. The windows stay the sampling unit of the bronze set.",
   "min_non_letter_density": 0.2,
   "min_line_length": 20,
   "context_lines": 2,

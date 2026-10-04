@@ -16,8 +16,12 @@ sc_prefilter(text, kit, drop_references = TRUE)
 \value{
 A data frame with one row per kept window: \code{start} and \code{end}
 (character offsets into \code{text}), \code{line} (the 0-based index of the line
-that triggered the window), and \code{text} (the window's own text, built
-from the reference-blanked lines). Zero rows when nothing survives.
+that triggered the window), \code{text} (the window's own text, built
+from the reference-blanked lines), \code{start_line} and \code{end_line} (the
+0-based first and last line of the window), and \code{char_start} (the
+offset of the window's first character counted over the
+reference-blanked lines, the coordinate \code{\link[=sc_units]{sc_units()}} and the pipeline
+use). Zero rows when nothing survives.
 }
 \description{
 Applies the shared prefilter rules: a line survives only if it is long
