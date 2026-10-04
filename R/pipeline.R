@@ -51,6 +51,14 @@ pipeline_group_model <- function(text, tags) {
   rows
 }
 
+# Counts the newlines of the unit text before the statistic's relative
+# start; the unit text is the blanked lines joined by "\n", so this is the
+# same line index as in the repaired document.
+statistic_line <- function(unit_text, unit_first_line, relative_start) {
+  before <- substr(unit_text, 1L, relative_start)
+  unit_first_line + lengths(regmatches(before, gregexpr("\n", before, fixed = TRUE)))
+}
+
 empty_check_result <- function() {
   data.frame(source = character(0), test_type = character(0), statistic = numeric(0),
             df1 = numeric(0), df2 = numeric(0), p_operator = character(0),
@@ -115,8 +123,8 @@ fragment_frame <- function(fragments) {
 #'   `df2`, `p_operator`, `p_value`, `computed_p`, `verdict`, `line`,
 #'   `reason`, then `statistic_start` and `statistic_end` (the interval of
 #'   the statistic in the document, 0-based, half-open; the reference's
-#'   `statistic_span`). `line` is the first line of the unit that held the
-#'   result. Zero rows when the document holds nothing checkable.
+#'   `statistic_span`). `line` follows the `line_rule` of the parity file in
+#'   the kit. Zero rows when the document holds nothing checkable.
 #'
 #'   Two attributes are attached. `"stages"` holds the counts: `lines`,
 #'   `windows_kept`, `units_kept`, `by_pattern`, `by_model` and
@@ -153,7 +161,6 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
   }
 
   for (i in seq_len(nrow(units))) {
-    line_no <- units$line[i]
     shift <- units$char_start[i]
 
     pattern_hits <- sc_extract(units$text[i], kit)
@@ -171,7 +178,8 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
         df1 = sc_parse_number(pattern_hits$df1[r]), df2 = sc_parse_number(pattern_hits$df2[r]),
         p_operator = pattern_hits$p_operator[r], p_value = sc_parse_number(pattern_hits$p_value[r]),
         p_value_text = pattern_hits$p_value[r],
-        line = line_no, statistic_span = span)
+        line = statistic_line(units$text[i], units$start_line[i], span[1] - shift),
+        statistic_span = span)
       n_pattern <- n_pattern + 1L
     }
 
@@ -180,7 +188,7 @@ sc_check_text <- function(text, kit = sc_kit(), model = sc_load_model(kit)) {
       if (is_duplicate(span)) next
       taken <- rbind(taken, span)
       mr$statistic_span <- span
-      found[[length(found) + 1L]] <- c(list(source = "model"), mr, list(line = line_no))
+      found[[length(found) + 1L]] <- c(list(source = "model"), mr, list(line = statistic_line(units$text[i], units$start_line[i], span[1] - shift)))
       n_model <- n_model + 1L
     }
   }

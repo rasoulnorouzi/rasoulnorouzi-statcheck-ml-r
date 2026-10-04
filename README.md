@@ -82,11 +82,11 @@ res
 4 inst/extdata/sample_paper_damaged.pdf pattern         t      1.80  46  NA
 5 inst/extdata/sample_paper_damaged.pdf pattern         t      4.15  19  NA
   p_operator p_value   computed_p        verdict line
-1          =   0.022 0.0223157282     consistent    0
-2          =   0.012 0.0124001810     consistent    0
-3          =   0.003 0.0029766142     consistent    0
-4          =   0.040 0.0784206648 decision_error    0
-5          =   0.001 0.0005439714     consistent    0
+1          =   0.022 0.0223157282     consistent    2
+2          =   0.012 0.0124001810     consistent    3
+3          =   0.003 0.0029766142     consistent    4
+4          =   0.040 0.0784206648 decision_error    5
+5          =   0.001 0.0005439714     consistent    6
                                                           reason
 1
 2
@@ -115,7 +115,7 @@ recomputed p-value is `.078`.
 | `p_value` | the reported p-value |
 | `computed_p` | the p-value recomputed from `statistic` and the degrees of freedom |
 | `verdict` | `"consistent"`, `"inconsistent"`, `"decision_error"`, or `"undecidable"` |
-| `line` | the line of the normalised text the result's passage starts at |
+| `line` | the 0-based line of the repaired text that holds the first character of the statistic |
 | `reason` | why the verdict is what it is; empty when `"consistent"` |
 | `statistic_start`, `statistic_end` | the statistic's character interval in the document, 0-based, half-open |
 

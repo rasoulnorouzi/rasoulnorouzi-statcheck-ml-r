@@ -20,8 +20,8 @@ A data frame with one row per result that has a test name:
 \code{df2}, \code{p_operator}, \code{p_value}, \code{computed_p}, \code{verdict}, \code{line},
 \code{reason}, then \code{statistic_start} and \code{statistic_end} (the interval of
 the statistic in the document, 0-based, half-open; the reference's
-\code{statistic_span}). \code{line} is the first line of the unit that held the
-result. Zero rows when the document holds nothing checkable.
+\code{statistic_span}). \code{line} follows the \code{line_rule} of the parity file in
+the kit. Zero rows when the document holds nothing checkable.
 
 Two attributes are attached. \code{"stages"} holds the counts: \code{lines},
 \code{windows_kept}, \code{units_kept}, \code{by_pattern}, \code{by_model} and

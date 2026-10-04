@@ -66,3 +66,11 @@ test_that("sc_check_text reports the stage counts as an attribute", {
   expect_identical(stages$fragments, nrow(attr(out, "fragments")))
   expect_true(stages$units_kept > 0 && stages$units_kept <= stages$windows_kept)
 })
+
+test_that("line is the line of the statistic, not the first line of the passage", {
+  text <- "The sample was large.\nWe then compared the groups and found that\nthe effect was significant, t(28) = 2.87, p = .006."
+  out <- sc_check_text(text, kit, model)
+  expect_identical(nrow(out), 1L)
+  expect_identical(out$line, 2L)
+  expect_identical(attr(out, "stages")$units_kept, 1L)
+})

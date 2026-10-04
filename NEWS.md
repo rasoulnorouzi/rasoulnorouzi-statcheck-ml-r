@@ -11,6 +11,8 @@
 * A find with no test name is a fragment. It is not checked, gets no
   verdict, and comes back in `attr(x, "fragments")`. `line` is now the
   first line of the unit, not the triggering line.
+* `line` is the line that holds the statistic's first character (the
+  kit's `line_rule`), for results and fragments, not the unit's first line.
 
 # statcheckml 0.1.0
 
