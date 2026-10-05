@@ -1,16 +1,16 @@
 {
  "kit_version": "2.0.0",
  "mother_repository": "https://github.com/rasoulnorouzi/ml-statcheck",
- "mother_commit": "dcb3a3badafc334886eb16aecbf76c055d733e14",
+ "mother_commit": "c599c38025c71dc623a1cab89f9c717428b85f2b",
  "mother_dirty": false,
- "generated_at": "2026-10-04T19:06:45.952704+00:00",
+ "generated_at": "2026-10-05T11:56:09.088323+00:00",
  "port_name": "statcheck-ml-r",
  "model_default": "gru-crf",
  "models": [
   "gru-crf"
  ],
  "files": {
-  "README.md": "08f5c198571d3c076f26778c7faa524f3f29aa6927b3dad74a4f0ad7c1f489bc",
+  "README.md": "46d8234c47fb6b69b70e3fbb5fc32d027cf32e675ddbe1da40b50657b9c3db4a",
   "model/gru-crf/charmap.json": "6685fb09f642173eeba89db521a148a6b14d0feed93943f1a2ab469bf3c1dc98",
   "model/gru-crf/decoder.json": "063e08078f37550bd67a04d65c00d28a0a33189f2a4421d5a577a5d7136891de",
   "model/gru-crf/tagger.onnx": "a40aa114b41dc779a861bc243a8b250fd31f6dad6820e7c073e2371ec377951a",
