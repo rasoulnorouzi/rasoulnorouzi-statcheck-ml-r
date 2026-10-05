@@ -1,5 +1,10 @@
 # statcheckml 0.2.1
 
+* Every regular expression runs under PCRE's `(*UCP)` (the new `ucp()`), so `\s`
+  matches a no-break space and `\d`, `\w` and `\b` follow Unicode, as in the Python
+  reference. A PDF that set `p < .01` with no-break spaces passed the reference's
+  pattern and failed this port's; the model then found the result instead. The kit's
+  parity case `nbsp-operators` holds the ports to the reference.
 * A value the model marks that the PDF split with spaces, such as `p <. 05`, is read as one
   number (`.05`); it came out with no p-value and an undecidable verdict. The rule is
   `split_number_rule` in `inst/kit/parity/cases.json`. Kit from mother commit d366bec.

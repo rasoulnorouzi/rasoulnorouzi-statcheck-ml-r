@@ -51,7 +51,7 @@ capture_value <- function(text, name, starts, lengths, group_names) {
 }
 
 extract_matches <- function(text, test_type, pattern) {
-  m <- gregexpr(pattern, text, perl = TRUE, ignore.case = TRUE, useBytes = FALSE)[[1]]
+  m <- gregexpr(ucp(pattern), text, perl = TRUE, ignore.case = TRUE, useBytes = FALSE)[[1]]
   if (m[1] == -1) return(list())
 
   group_names <- attr(m, "capture.names")

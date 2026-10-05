@@ -129,7 +129,7 @@ group_parse_clean <- function(s) {
   # A thousands separator sits between a digit and exactly three digits not
   # followed by a fourth: "1,234.5" is 1234.5, "2,45" is left alone, because
   # this corpus writes decimals with a period.
-  s <- gsub("(?<=\\d),(?=\\d{3}(?:\\D|$))", "", s, perl = TRUE)
+  s <- gsub(ucp("(?<=\\d),(?=\\d{3}(?:\\D|$))"), "", s, perl = TRUE)
   if (!nzchar(s)) return(NA_real_)
   val <- suppressWarnings(as.numeric(s))
   if (is.na(val)) return(NA_real_)

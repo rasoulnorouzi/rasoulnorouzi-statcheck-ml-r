@@ -42,7 +42,7 @@ sc_model_normalise <- function(text) {
 join_split_number <- function(text) {
   if (is.null(text) || is.na(text)) return(text)
   trimmed <- trimws(text)
-  if (grepl("^-?[0-9.]+(\\s+[0-9.]+)+$", trimmed, perl = TRUE)) gsub("\\s+", "", trimmed, perl = TRUE) else text
+  if (grepl(ucp("^-?[0-9.]+(\\s+[0-9.]+)+$"), trimmed, perl = TRUE)) gsub(ucp("\\s+"), "", trimmed, perl = TRUE) else text
 }
 
 pipeline_group_model <- function(text, tags) {

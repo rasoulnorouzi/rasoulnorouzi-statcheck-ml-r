@@ -61,7 +61,7 @@ prefilter_density <- function(line) {
 # discard the result along with the citation, so length rules it out first.
 prefilter_is_reference <- function(line, spec) {
   if (nchar(line, type = "chars") > spec$max_reference_line) return(FALSE)
-  any(vapply(spec$ref_line_patterns, function(p) grepl(p, line, perl = TRUE), logical(1)))
+  any(vapply(spec$ref_line_patterns, function(p) grepl(ucp(p), line, perl = TRUE), logical(1)))
 }
 
 # Blank the reference section and stray reference lines. Lines are blanked
@@ -72,7 +72,7 @@ strip_references <- function(lines, spec) {
   start_i <- floor(n * 0.55) + 1L
   if (start_i <= n) {
     for (i in start_i:n) {
-      if (grepl(spec$ref_head_pattern, lines[i], perl = TRUE, ignore.case = TRUE)) {
+      if (grepl(ucp(spec$ref_head_pattern), lines[i], perl = TRUE, ignore.case = TRUE)) {
         cut_count <- i - 1L
         break
       }
@@ -90,7 +90,7 @@ strip_references <- function(lines, spec) {
 
 keeps_line <- function(line, spec) {
   if (nchar(line, type = "chars") < spec$min_length) return(FALSE)
-  if (!grepl(spec$digit_pattern, line, perl = TRUE)) return(FALSE)
+  if (!grepl(ucp(spec$digit_pattern), line, perl = TRUE)) return(FALSE)
   prefilter_density(line) >= spec$min_density
 }
 

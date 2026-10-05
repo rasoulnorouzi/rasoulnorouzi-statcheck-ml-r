@@ -20989,6 +20989,45 @@
    {
     "expected": [
      {
+      "computed_p": 0.005706015843508665,
+      "df1": 2.0,
+      "df2": 422.0,
+      "line": 0,
+      "p_operator": "<",
+      "p_value": 0.01,
+      "source": "pattern",
+      "statistic": 5.23,
+      "statistic_span": [
+       81,
+       85
+      ],
+      "test_type": "f",
+      "verdict": "consistent"
+     },
+     {
+      "computed_p": 0.01967924149142397,
+      "df1": 215.0,
+      "df2": null,
+      "line": 1,
+      "p_operator": "<",
+      "p_value": 0.001,
+      "source": "pattern",
+      "statistic": 2.35,
+      "statistic_span": [
+       124,
+       128
+      ],
+      "test_type": "t",
+      "verdict": "inconsistent"
+     }
+    ],
+    "expected_fragments": [],
+    "name": "nbsp-operators",
+    "text": "a significant interaction between assessment time and type of scale, F(2, 422) = 5.23,\np < .01, and a main effect, t(215) = 2.35, p < .001.\n"
+   },
+   {
+    "expected": [
+     {
       "computed_p": 0.018106565720271584,
       "df1": 594.0,
       "df2": null,

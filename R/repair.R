@@ -15,7 +15,7 @@
 # participate). Positional, unlike `extract.R`'s named-capture reader,
 # because `repair.json`'s pattern captures by position.
 regex_captures <- function(text, pattern, ignore.case = FALSE) {
-  m <- gregexpr(pattern, text, perl = TRUE, ignore.case = ignore.case)[[1]]
+  m <- gregexpr(ucp(pattern), text, perl = TRUE, ignore.case = ignore.case)[[1]]
   if (m[1] == -1) return(list())
   starts <- attr(m, "capture.start")
   lens <- attr(m, "capture.length")
@@ -32,7 +32,7 @@ regex_captures <- function(text, pattern, ignore.case = FALSE) {
 # `gsub`, and both repair stages replace only what a match captured, not the
 # whole line.
 regex_sub <- function(text, pattern, fn, ignore.case = FALSE) {
-  m <- gregexpr(pattern, text, perl = TRUE, ignore.case = ignore.case)[[1]]
+  m <- gregexpr(ucp(pattern), text, perl = TRUE, ignore.case = ignore.case)[[1]]
   if (m[1] == -1) return(text)
   starts <- as.integer(m)
   mlens <- attr(m, "match.length")

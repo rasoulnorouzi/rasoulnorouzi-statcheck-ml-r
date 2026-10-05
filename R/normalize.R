@@ -65,7 +65,7 @@ reflow <- function(text, spec) {
 # model reads all three well.
 canonicalise <- function(text, spec) {
   slots <- spec$canonical_operator_slots
-  matches <- gregexpr(spec$operator_site_pattern, text, perl = TRUE, useBytes = FALSE)[[1]]
+  matches <- gregexpr(ucp(spec$operator_site_pattern), text, perl = TRUE, useBytes = FALSE)[[1]]
   if (matches[1] == -1) return(list(text = text, mapping = character(0)))
 
   starts <- attr(matches, "capture.start")
