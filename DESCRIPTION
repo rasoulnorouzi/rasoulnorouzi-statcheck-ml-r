@@ -1,6 +1,6 @@
 Package: statcheckml
 Title: R Port of 'statcheck-ml'
-Version: 0.2.0
+Version: 0.2.1
 Authors@R:
     person("Rasoul", "Norouzi", role = c("aut", "cre"), email = "rslnorouzi@gmail.com")
 Description: A port of 'statcheck-ml', a machine-learned replacement for the

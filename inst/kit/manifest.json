@@ -1,21 +1,21 @@
 {
  "kit_version": "2.0.0",
  "mother_repository": "https://github.com/rasoulnorouzi/ml-statcheck",
- "mother_commit": "1dfd184904d07d01d03397e47f7566792917040a",
+ "mother_commit": "d366bec1412be218ba2334472bf343f77b5ceb03",
  "mother_dirty": false,
- "generated_at": "2026-10-05T17:53:37.043111+00:00",
+ "generated_at": "2026-10-05T20:16:37.544172+00:00",
  "port_name": "statcheck-ml-r",
  "model_default": "gru-crf",
  "models": [
   "gru-crf"
  ],
  "files": {
-  "README.md": "aff1cdadfb227f749d6e6903fa4c0d9e0bc944d8001205042b5c45cc9d0c3249",
+  "README.md": "aeb64fa7113d9461f0322e11c48627c28f76041376a4e24ce617ec4604576076",
   "model/gru-crf/charmap.json": "49af3fb2d0edc3716ad22ac3325cfa423b08532b9f09fbca0b505ff3a251170e",
   "model/gru-crf/decoder.json": "71cc9a2f4693cd4d6e5559398b752ebe2a55d4ea0b7f3a5984e442d549bf1661",
   "model/gru-crf/tagger.onnx": "2a11650a8f122a94f505cb33fcc6cd554dfa9b5279a85784622919a05f253110",
   "model/gru-crf/weights.json": "c3160ad85a6112d80d65559447ece121638fe0162b483fd4168545e3580006c0",
-  "parity/cases.json": "8e6cc6e3124da50c54ea4016cb5a1b7d02aadf798ad724a3bb57c568342209cf",
+  "parity/cases.json": "705bd10705bc1a79536f643bf4a0e60e94eeb296acf5bfd0ed7e60f1eb9732bc",
   "spec/charmap.json": "49af3fb2d0edc3716ad22ac3325cfa423b08532b9f09fbca0b505ff3a251170e",
   "spec/font_table.json": "5b1c8dc9ad790941bb899106ecb524a906f177592ee9efd9673c796ca5d714d3",
   "spec/normalize.json": "7a113d567ac16f7e64ac60df3bd63c9cedff269fa30746b923b17d9335f65823",

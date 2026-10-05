@@ -35,11 +35,22 @@ sc_model_normalise <- function(text) {
 # numbers: the p-value check ([sc_verdict()]) needs the text as printed, not
 # the number `sc_parse_number()` made of it, to know how many decimals the
 # paper rounded to.
+# A number the PDF conversion split with spaces, such as ". 05" or "2 .37":
+# digits and points only, with whitespace between them. The model marks such a
+# span as one value, so it is read as one (`split_number_rule` in the kit's
+# parity cases). The pattern never matches one.
+join_split_number <- function(text) {
+  if (is.null(text) || is.na(text)) return(text)
+  trimmed <- trimws(text)
+  if (grepl("^-?[0-9.]+(\\s+[0-9.]+)+$", trimmed, perl = TRUE)) gsub("\\s+", "", trimmed, perl = TRUE) else text
+}
+
 pipeline_group_model <- function(text, tags) {
   spans <- sc_tags_to_spans(tags)
   groups <- sc_group_spans(text, spans)
   rows <- list()
   for (g in groups) {
+    g$parts <- lapply(g$parts, join_split_number)
     res <- group_result_from_parts(g$parts, sc_parse_number)
     if (!is.null(res)) {
       res$statistic_text <- g$parts[["STAT"]]

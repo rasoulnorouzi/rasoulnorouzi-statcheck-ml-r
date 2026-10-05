@@ -20744,7 +20744,7 @@
       "df2": 286.0,
       "line": 46,
       "p_operator": "<",
-      "p_value": null,
+      "p_value": 0.01,
       "source": "model",
       "statistic": 4.05,
       "statistic_span": [
@@ -20752,7 +20752,7 @@
        2231
       ],
       "test_type": "f",
-      "verdict": "undecidable"
+      "verdict": "consistent"
      },
      {
       "computed_p": null,
@@ -20985,6 +20985,45 @@
     ],
     "name": "fragment-model-nameless",
     "text": "behavioural reactions, social participation, and precautionary behaviour. For the \n\ncorrelation coefficients were substantial, with r = .01, .03, and .05 representing small, \nmedium, and large effect size. Last, we carried out multi-level regression analysis to \nexamine the associations between the independent variables and the dependent variables, "
+   },
+   {
+    "expected": [
+     {
+      "computed_p": 0.018106565720271584,
+      "df1": 594.0,
+      "df2": null,
+      "line": 0,
+      "p_operator": "<",
+      "p_value": 0.05,
+      "source": "model",
+      "statistic": 2.37,
+      "statistic_span": [
+       40,
+       44
+      ],
+      "test_type": "t",
+      "verdict": "consistent"
+     },
+     {
+      "computed_p": 0.0217940135833083,
+      "df1": 594.0,
+      "df2": null,
+      "line": 0,
+      "p_operator": "<",
+      "p_value": 0.05,
+      "source": "model",
+      "statistic": 2.3,
+      "statistic_span": [
+       111,
+       115
+      ],
+      "test_type": "t",
+      "verdict": "consistent"
+     }
+    ],
+    "expected_fragments": [],
+    "name": "split-number-pvalue",
+    "text": "who reported traumatic events, t(594) = 2.37, p <. 05, scored slightly higher on a neuroticism scale, t(594) = 2.30, p <. 05, and scored lower on openness."
    }
   ],
   "prefilter": [
@@ -22725,5 +22764,6 @@
    }
   ]
  },
+ "split_number_rule": "A value span the model marks (STAT, DF1, DF2, PVAL) that is digits and points with whitespace between them, such as '. 05' or '2 .37', and optionally a leading minus, is read with the whitespace removed: '. 05' is .05. Its p text for the decimals is the joined text too. Other spans, and every pattern find, are read as before.",
  "version": 3
 }

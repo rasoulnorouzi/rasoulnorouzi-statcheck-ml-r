@@ -1,3 +1,9 @@
+# statcheckml 0.2.1
+
+* A value the model marks that the PDF split with spaces, such as `p <. 05`, is read as one
+  number (`.05`); it came out with no p-value and an undecidable verdict. The rule is
+  `split_number_rule` in `inst/kit/parity/cases.json`. Kit from mother commit d366bec.
+
 # statcheckml 0.2.0
 
 * The kit ships the version 4 model `gate-none` (gru-crf, no noise, seed 0) from mother
