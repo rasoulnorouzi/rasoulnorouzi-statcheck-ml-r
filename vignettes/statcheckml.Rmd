@@ -517,7 +517,9 @@ write.csv(all_results, "checked_results.csv", row.names = FALSE)
   on. Measured on 200 holdout documents and 327 gold results: PyMuPDF
   recall 0.911, pdfium 0.902, poppler 0.872 -- a spread of 0.040, under the
   mother project's gate of 0.060, but a real gap for any one document.
-  Source: `results/REPORT.md`, section 9.
+  Source: `results/REPORT.md`, section 9. That measure used poppler's layout mode. Since 0.2.1
+  `sc_read_pdf()` reads the stored order (`raw = TRUE`), which on six test papers finds
+  the same 32 results as the Python reference, against 24 in layout mode.
 - **What the prefilter drops is gone for good.** A line must be at least 20
   characters, hold a digit, and be at least 20% non-letter characters to
   become a window; text outside the kept windows never reaches the pattern

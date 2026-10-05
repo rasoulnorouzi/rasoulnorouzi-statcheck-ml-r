@@ -21,7 +21,7 @@ Imports:
     jsonlite,
     digest,
     stats,
-    pdftools
+    pdftools (>= 3.6.0)
 Suggests:
     knitr,
     R.utils,

@@ -19,8 +19,12 @@ Normalised text, or \code{""} when the document could not be read.
 }
 \description{
 R has no maintained PDF reader besides pdftools, which bundles poppler.
-Poppler returns a whole column as one line, which is why every result of
-\code{\link[=sc_read_pdf]{sc_read_pdf()}} passes through \code{\link[=sc_normalize]{sc_normalize()}} before it comes back.
+The text comes in the order the PDF stores it (\code{raw = TRUE}), not in
+poppler's layout mode, which sets the two columns of a page side by side
+and so splits a result across the other column's lines. On six test
+papers the layout mode found 24 of the 32 results the Python reference
+finds, the stored order all 32. Poppler can still return a whole column as
+one line, which is why every result passes through \code{\link[=sc_normalize]{sc_normalize()}}.
 }
 \details{
 pdftools hangs on rare files. When R.utils is installed, a document that

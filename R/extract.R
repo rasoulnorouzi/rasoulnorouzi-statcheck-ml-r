@@ -158,8 +158,12 @@ has_timeout <- function() requireNamespace("R.utils", quietly = TRUE)
 #' Read one PDF and return normalised text
 #'
 #' R has no maintained PDF reader besides pdftools, which bundles poppler.
-#' Poppler returns a whole column as one line, which is why every result of
-#' [sc_read_pdf()] passes through [sc_normalize()] before it comes back.
+#' The text comes in the order the PDF stores it (`raw = TRUE`), not in
+#' poppler's layout mode, which sets the two columns of a page side by side
+#' and so splits a result across the other column's lines. On six test
+#' papers the layout mode found 24 of the 32 results the Python reference
+#' finds, the stored order all 32. Poppler can still return a whole column as
+#' one line, which is why every result passes through [sc_normalize()].
 #'
 #' pdftools hangs on rare files. When R.utils is installed, a document that
 #' does not finish within `timeout` seconds returns `""` instead of
@@ -178,7 +182,7 @@ has_timeout <- function() requireNamespace("R.utils", quietly = TRUE)
 #' }
 #' @export
 sc_read_pdf <- function(path, kit, timeout = 60) {
-  read_it <- function() paste(pdftools::pdf_text(path), collapse = "")
+  read_it <- function() paste(pdftools::pdf_text(path, raw = TRUE), collapse = "")
 
   text <- tryCatch({
     if (has_timeout()) {

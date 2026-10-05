@@ -1,5 +1,9 @@
 # statcheckml 0.2.1
 
+* `sc_read_pdf()` reads the text in the order the PDF stores it
+  (`pdftools::pdf_text(raw = TRUE)`, pdftools 3.6.0 or later). Poppler's layout mode set
+  the two columns of a page side by side and split results across them. On six test
+  papers R now finds the same results as the Python reference (32), not 24.
 * Every regular expression runs under PCRE's `(*UCP)` (the new `ucp()`), so `\s`
   matches a no-break space and `\d`, `\w` and `\b` follow Unicode, as in the Python
   reference. A PDF that set `p < .01` with no-break spaces passed the reference's

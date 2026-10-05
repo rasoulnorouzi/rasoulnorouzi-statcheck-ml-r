@@ -184,7 +184,9 @@ models: gru-crf
   models were trained on. Measured across a 200-document, 327-result
   corpus, poppler's recall is 0.872 against 0.911 for PyMuPDF -- a real
   gap, not a rounding difference, though it did not show up on the small
-  sample PDFs in this repository.
+  sample PDFs in this repository. That figure is for poppler's layout mode. Since
+  0.2.1 this port reads the order the PDF stores (`raw = TRUE`); on six test papers it
+  then finds the same 32 results as the Python reference, against 24 before.
 - The trained model was fit on bronze-tier labels: machine-annotated text,
   never a human-adjudicated gold set. See the mother project's `PLAN.md`
   for the label tiers and what each one means.
