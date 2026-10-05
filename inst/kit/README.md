@@ -6,13 +6,13 @@ Do not edit a file in this kit here. Change it in the mother repository and expo
 
 Kit version: 2.0.0
 Mother repository: https://github.com/rasoulnorouzi/ml-statcheck
-Mother commit: c599c38025c71dc623a1cab89f9c717428b85f2b
+Mother commit: 1dfd184904d07d01d03397e47f7566792917040a
 
 ## Models
 
 | config | dev F1 | holdout F1 | holdout 95% CI |
 |---|---|---|---|
-| gru-crf | 0.927 | 0.904 | [0.871, 0.934] |
+| gru-crf | 0.937 | 0.921 | [0.891, 0.946] |
 
 ## Verification
 

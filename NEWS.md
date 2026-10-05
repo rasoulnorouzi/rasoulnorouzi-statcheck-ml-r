@@ -1,4 +1,14 @@
-# statcheckml (development)
+# statcheckml 0.2.0
+
+* The kit ships the version 4 model `gate-none` (gru-crf, no noise, seed 0) from mother
+  commit 1dfd184. It trained on the version 2 bronze windows plus 1165 passages labelled
+  by three rater agents with human coders as a fourth vote. Holdout F1: model 0.921,
+  hybrid 0.923 (was 0.904 and 0.908). On 169 human-coded papers the hybrid finds 0.763 of
+  the results with a test name (was 0.723); that score was read before the model was
+  chosen, so it is not a clean held-out score.
+* `inst/kit/spec/charmap.json` has 180 characters (one control character added). The model and
+  the spec share it.
+
 
 * Reads kit spec version 2. `sc_units()` reads the prefilter `unit` key:
   with `"passage"`, overlapping windows merge into one passage that the

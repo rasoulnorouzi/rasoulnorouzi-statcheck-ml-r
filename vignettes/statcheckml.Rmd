@@ -28,15 +28,15 @@ baseline. No model output reaches a verdict.
 The model was trained on bronze labels: three rater agents (Claude haiku,
 sonnet, and opus) annotated the training and holdout windows, a scripted
 consensus rule combined their readings, and an adjudicator agent settled
-what the rule could not. No person checked a label by hand, and there is no
-human gold set. The mother project's `PLAN.md` calls this the bronze tier,
-and reports every number against it, never against a claim of ground truth.
+what the rule could not. The model of kit 0.2.0 also trained on passages
+where three human coders were a fourth vote. The mother project's `PLAN.md`
+calls these labels the bronze tier. On 169 human-coded papers (476 results) the hybrid finds 0.763 of the results with a test name; R statcheck finds 0.479 on the same text in passages and 0.237 from the PDF. The model was chosen after those papers were scored, so 0.763 is not a clean held-out score.
 
 Measured on the holdout (576 windows from 515 documents, 327 results), the cascade -- the
 pattern baseline after operator repair, plus what the model finds beyond it
--- reaches F1 0.908 [0.875, 0.937]. The pattern baseline alone reaches 0.636
+-- reaches F1 0.923 [0.894, 0.947]. The pattern baseline alone reaches 0.636
 after repair and 0.308 on raw text. Source: the mother repository
-`statcheck-ml`, `results/REPORT.md`, Abstract and section 6.
+`statcheck-ml`, `results/v4/shipped.json` and `results/eval.json`.
 
 ## Install
 
@@ -429,8 +429,10 @@ model
 
 The mother project trained six configurations -- three families (LSTM,
 GRU, a dilated CNN), each with a softmax or a CRF head -- and selected by
-dev F1. `gru-crf`'s dev F1 is 0.927; its holdout F1 is 0.904 [0.871, 0.934]
-(`results/REPORT.md`, section 5). Two more configurations, `gru-softmax`
+dev F1. In version 2, `gru-crf`'s dev F1 was 0.927 and its holdout F1 0.904
+[0.871, 0.934] (`results/REPORT.md`, section 5). Kit 0.2.0 ships the version 4
+`gru-crf` run `gate-none`: holdout F1 0.921 [0.891, 0.946]
+(`results/v4/shipped.json`). The comparison below is the version 2 one. Two more configurations, `gru-softmax`
 and `lstm-softmax`, ship in the mother project's model zoo; this R kit
 carries `gru-crf` alone. The three do not differ on the holdout: `gru-crf`
 against `gru-softmax` differs by 0.001 F1 [-0.022, 0.023] (p = 0.930), and
